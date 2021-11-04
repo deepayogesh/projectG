@@ -1,0 +1,35 @@
+kaggle								WatchED_List
+
+Action								Action
+Adventure							Adventure
+Animation							Animation
+Aniplex							      |	Biography
+BROSTA TV						      <
+Carousel Productions					      <
+Comedy								Comedy
+Crime								Crime
+Documentary							Documentary
+Drama								Drama
+Family								Family
+Fantasy								Fantasy
+Foreign							      |	Film-Noir
+GoHands							      <
+History								History
+Horror								Horror
+Mardock Scramble Production Committee			      <
+Music								Music
+							      >	Musical
+Mystery								Mystery
+Odyssey Media						      |	News
+Pulser Productions					      |	Reality-TV
+Rogue State						      <
+Romance								Romance
+Science Fiction						      |	Sci-Fi
+Sentai Filmworks					      |	Short
+TV Movie						      |	Sport
+Telescene Film Group Productions			      <
+The Cartel						      <
+Thriller							Thriller
+Vision View Entertainment				      <
+War								War
+Western								Western
