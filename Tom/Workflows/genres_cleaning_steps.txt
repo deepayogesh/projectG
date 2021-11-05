@@ -19,6 +19,21 @@ Telescene Film Group Productions
 The Cartel
 Vision View Entertainment
 
+"Aniplex",
+"BROSTA TV",
+"Carousel Productions",
+"Foreign",
+"GoHands",
+"Mardock Scramble Production Committee",
+"Odyssey Media",
+"Pulser Productions",
+"Rogue State",
+"Sentai Filmworks",
+"TV Movie",
+"Telescene Film Group Productions",
+"The Cartel",
+"Vision View Entertainment"
+
 2. WatchED List Genres to Drop:
 
 Biography
@@ -32,3 +47,5 @@ Sport
 3. WatchED List Genres to Rename:
 
 Sci-Fi > Science Fiction
+
+# '|'.join()
