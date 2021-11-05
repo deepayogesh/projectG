@@ -1,15 +1,12 @@
 # Project Movie Review
 ## Selected Topic
-Our project will be Movie suggestion based on watched history.
+Our team is creating a movie suggestion algorithm based on the user's recent film history and review scores.
 
 ## Reason for Selecting the topic
 
 
 ## Description of Source Data
-
-
-
-
+Data will be sourced from kaggle, containing a common seperated list of films and their metadata.
 
 ## Technologies Used
 ### Data Cleaning and Analysis
