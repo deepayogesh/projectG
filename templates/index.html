@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Movies Recommendation Engine</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Add Jumbotron to Header -->
+      <div class="jumbotron text-center">
+        <h1>Movies Recommendation Engine</h1>
+        <form action = "http://localhost:5000/recommendation" method = "POST">
+         <p>Movie Title <input type = "text" name="title" ></p>
+         <p>Movie Genre <input type = "text" name="genre" /></p>
+         <p>Movie Rating <input type = "text" name="rating" /></p>
+        <!-- Add a button to activate scraping script -->
+        <p><input type = "submit" value = "Get Recommendation" /></p></p>
+        </form>
+      </div>
+
+
+
+    </div>
+  </body>
+</html>
