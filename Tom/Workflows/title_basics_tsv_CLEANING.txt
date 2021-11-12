@@ -1,0 +1,8 @@
+
+title_basics.tsv Cleaning Steps
+===============================
+
+1. Filter for 'titleType' of "movie" only and isAdult of "0" only.
+
+perl -F"\t" -lne 'print if $.==1 || ($F[1]=~/movie/ && $F[4]=~/0/)' title_basics.tsv | tee title_basics_non-adult_movies.tsv
+
