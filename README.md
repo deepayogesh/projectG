@@ -3,13 +3,26 @@
 Creating a movie suggestion algorithm based on watch history.
 
 ## Reason for Selecting the topic
+=======
+Our project will be Movie suggestion based on watched history. 
+
+## Reason for Selecting the topic
+
 The purpose of this project is to get movie recommendation based on the watched history of user. 
 
 ## Description of Source Data
 The source data will be the files movies_metadata.csv and ratings_small.csv.  These files are sourced from kaggle and imdb.  Watched_list.csv, 
 
+
 ## Description of Communication protocols
 We will be using Slack, video chat and git commits for our project for the purpose of communication.
+=======
+The source data will be the three csv files Watched_list.csv, movies_metadata.csv, ratings_small.csv.
+
+## Description of Communication protocols
+
+We will be using Slack, video chat and git commits for our project for the purpose of communication.
+
 
 ## Technologies Used
 ### Data Cleaning and Analysis
