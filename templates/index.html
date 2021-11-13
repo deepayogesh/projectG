@@ -23,31 +23,29 @@
       <h1>Movies Recommendation Engine</h1>
       <form action="http://localhost:5000/recommendation" method="POST">
         <label for="movieTitle" accesskey="p" style="padding-right: 450px;">Movie Title</label>
-        <select name="movieTitle" id="movieTitle">
-          <option value="tsr">The Shawshank Redemption</option>
-          <option value="tgf">The Godfather</option>
-          <option value="tgf2">The Godfather: Part II</option>
-          <option value="bbc">Il buono, il brutto, il cattivo</option>
-          <option value="pft">Pulp Fiction</option>
-          <option value="tam">12 Angry Men</option>
-          <option value="sdl">Schindler's List</option>
-          <option value="ltr">The Lord of the Rings: The Return of the King</option>
-          <option value="ftc">Fight Club</option>
+        <select name="movieTitle" id="movieTitle" onchange="optionChanged(this.value)">
         </select>
-        <br/>
-          <label for="movieGenre" accesskey="k" style="padding-right: 295px;">Movie Genre</label>
-          <input type="checkbox" name="genre1" value="action" >Action
-          <input type="checkbox" name="genre2" value="adventure">Adventure
-          <input type="checkbox" name="genre3" value="biography">Biography
-          <input type="checkbox" name="genre4" value="crime">Crime
-          <input type="checkbox" name="genre5" value="drama">Drama
-          <input type="checkbox" name="genre6" value="history">History
-          <input type="checkbox" name="genre7" value="western">Western<br/>
-        <label for="movieRating" accesskey="m" id="lab3" style="padding-right: 590px;">Movie Rating</label>
-        <input type="text" name="rating" />
-        <!-- Add a button to activate scraping script -->
-        <p style="padding-top: 10px;"><input type="submit" value="Get Recommendation" style="padding: 5px 10px;"/></p>
-        </p>
+        <br />
+        <label for="movieGenre" accesskey="k" id="movieGenre" style="padding-right: 55px;">Movie Genre&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+          <label for="movieRating" accesskey="m" id="lab3" style="padding-right: 890px;">Your Rating</label>
+          <select name="movieRating" id="movieRating">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+          <!-- Add a button to activate scraping script -->
+          <p style="padding-top: 10px;"><input type="submit" value="Get Recommendation" style="padding: 5px 10px;" />
+          </p>
+          </p>
       </form>
     </div>
     <!-- Add section for Mars News -->
@@ -93,6 +91,9 @@
       {% %}
     </div>
   </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+  <script src="data.js"></script>
 </body>
 
 </html>
