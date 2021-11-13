@@ -1,31 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Movies Recommendation Engine</title>
-    <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-    />
-  </head>
-  <body>
-    <div class="container">
-      <!-- Add Jumbotron to Header -->
-      <div class="jumbotron text-center">
-        <h1>Movies Recommendation Engine</h1>
-        <form action = "http://localhost:5000/recommendation" method = "POST">
-         <p>Movie Title <input type = "text" name="title" ></p>
-         <p>Movie Genre <input type = "text" name="genre" /></p>
-         <p>Movie Rating <input type = "text" name="rating" /></p>
-        <!-- Add a button to activate scraping script -->
-        <p><input type = "submit" value = "Get Recommendation" /></p></p>
-        </form>
-      </div>
 
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Movies Recommendation Engine</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="mediaquery.css">
+  <link rel="stylesheet"
+    href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+  <script src="https://kit.fontawesome.com/bc3a1796c2.js" crossorigin="anonymous"></script>
+  <link rel="shortcut icon" href="https://image.flaticon.com/icons/png/512/870/870910.ico" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css" />
+</head>
 
-
+<body>
+  <div class="container">
+    <!-- Add Jumbotron to Header -->
+    <div class="jumbotron text-center">
+      <h1>Movies Recommendation Engine</h1>
+      <form action="http://localhost:5000/recommendation" method="POST">
+        <label for="movieTitle" accesskey="p" style="padding-right: 450px;">Movie Title</label>
+        <select name="movieTitle" id="movieTitle" onchange="optionChanged(this.value)">
+        </select>
+        <br />
+        <label for="movieGenre" accesskey="k" id="movieGenre" style="padding-right: 55px;">Movie Genre&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+          <label for="movieRating" accesskey="m" id="lab3" style="padding-right: 890px;">Your Rating</label>
+          <select name="movieRating" id="movieRating">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+          <!-- Add a button to activate scraping script -->
+          <p style="padding-top: 10px;"><input type="submit" value="Get Recommendation" style="padding: 5px 10px;" />
+          </p>
+          </p>
+      </form>
     </div>
-  </body>
+    <!-- Add section for Mars News -->
+    <div class="row" id="mars-news">
+      <div class="col-md-12">
+        <div class="media">
+          <div class="media-body">
+            <h2>
+              <h2>
+                <h4 class="media-heading">{{ }}</h4>
+                <p>{{ }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Section for Featured Image and Facts table -->
+    <div class="row" id="mars-featured-image">
+      <div class="col-md-8">
+        <h2></h2>
+        <img src="{{}}" class="img-responsive" alt="Responsive image" />
+      </div>
+      <div class="col-md-4">
+        <!-- Mars Facts -->
+        <div class="row" id="mars-facts">
+          <h4></h4>
+          {{ }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Hemispheres Image -->
+    <div class="row" id="hemispheres">
+      <div class="col-md-12 text-center">
+        <h2></h2>
+      </div>
+    </div>
+    <div class="row" id="hemispheres">
+      {% %}
+      <div class="col-sm-6 text-center">
+        <img src="{{}}" class="img-responsive" alt="Responsive image" />
+        <p>{{}}</p>
+      </div>
+      {% %}
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+  <script src="data.js"></script>
+</body>
+
 </html>
