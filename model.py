@@ -15,6 +15,76 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import MinMaxScaler, MultiLabelBinarizer, StandardScaler
 import time
 
+
+def get_titles():
+
+
+    # Path to file directory and variables for input files.
+    file_dir = os.path.join("Data")
+
+    # imdb Titles metadata (Extracted from title.basics.tsv)
+    titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies_no_nulls.tsv'
+
+    # imdb US Titles only ids (Extracted from title.akas.tsv)
+    titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
+
+    # imdb Ratings data (Derived from title.ratings.tsv)
+    ratings_data_file = f'{file_dir}/title_ratings.csv'
+
+
+
+    # ## Part 1: Import Data, Clean and Transform Data
+
+    # Import imdb Titles metadata, imdb US Title IDs, imdb Ratings data
+
+    titles_metadata = pd.read_csv(titles_metadata_file, sep='\t')
+    titles_us_ids_only = pd.read_csv(titles_us_ids_only_file)
+    ratings_data = pd.read_csv(ratings_data_file)
+
+
+    # Drop all Titles where primaryTitle differs from originalTitle
+    # (Since language of titles is not often available, this is an attempt
+    # to filter out obscure non-English language films)
+
+    titles_metadata = titles_metadata.loc[titles_metadata['primaryTitle'] == titles_metadata['originalTitle']]
+
+
+    # Look for Films with the same primaryTitle
+    # and set primaryTitle to primaryTitle + (startYear)
+
+    duplicate_titles_df = pd.concat(g for _, g in titles_metadata.groupby('primaryTitle') if len(g) > 1)
+
+    duplicate_titles_df['primaryTitle'] = duplicate_titles_df.apply(lambda row: "".join([row['primaryTitle'], " (", str(row['startYear']), ")"]), axis=1)
+    duplicate_titles_df['originalTitle'] = duplicate_titles_df['primaryTitle']
+
+
+    # Merge duplicate_titles_df back with titles_metadata
+
+    cols = list(titles_metadata.columns)
+    titles_metadata.loc[titles_metadata['tconst'].isin(duplicate_titles_df['tconst']), cols] = duplicate_titles_df[cols]
+
+
+    # Drop all Titles from titles_metadata that are not in titles_us_ids_only
+
+    titles_metadata = pd.merge(titles_metadata, titles_us_ids_only, on='tconst', how='inner')
+    titles_metadata = titles_metadata.drop_duplicates()
+
+
+    # Convert startYear Column to int
+
+    titles_metadata['startYear'] = pd.to_numeric(titles_metadata['startYear'])
+
+
+    # Drop titles_metadata Rows with 'startYear' less than 1920
+
+    titles_metadata = titles_metadata.loc[titles_metadata['startYear'] >= 1920]
+
+
+    titles_list = titles_metadata['primaryTitle'].tolist()
+
+
+    return titles_list
+
 def get_inputTitle_info(inputTitle):
 
 
@@ -75,9 +145,9 @@ def get_inputTitle_info(inputTitle):
     # Drop titleType isAdult and endYear Columns
     # Note: If using title_basics_non-adult_movies_no_nulls.tsv, 'endYear' has already been removed.
 
-    titles_metadata = titles_metadata.loc[~(titles_metadata['genres'] == "\\N") & ~(titles_metadata['startYear'] == "\\N")]
-    titles_metadata.drop(['titleType'], axis=1, inplace=True)
-    titles_metadata.drop(['isAdult'], axis=1, inplace=True)
+    #titles_metadata = titles_metadata.loc[~(titles_metadata['genres'] == "\\N") & ~(titles_metadata['startYear'] == "\\N")]
+    #titles_metadata.drop(['titleType'], axis=1, inplace=True)
+    #titles_metadata.drop(['isAdult'], axis=1, inplace=True)
     #titles_metadata.drop(['endYear'], axis=1, inplace=True)
 
 
@@ -178,9 +248,9 @@ def get_movies(inputTitle):
     # Drop titleType isAdult and endYear Columns
     # Note: If using title_basics_non-adult_movies_no_nulls.tsv, 'endYear' has already been removed.
 
-    titles_metadata = titles_metadata.loc[~(titles_metadata['genres'] == "\\N") & ~(titles_metadata['startYear'] == "\\N")]
-    titles_metadata.drop(['titleType'], axis=1, inplace=True)
-    titles_metadata.drop(['isAdult'], axis=1, inplace=True)
+    #titles_metadata = titles_metadata.loc[~(titles_metadata['genres'] == "\\N") & ~(titles_metadata['startYear'] == "\\N")]
+    #titles_metadata.drop(['titleType'], axis=1, inplace=True)
+    #titles_metadata.drop(['isAdult'], axis=1, inplace=True)
     #titles_metadata.drop(['endYear'], axis=1, inplace=True)
 
 
@@ -417,5 +487,7 @@ def get_movies(inputTitle):
 
 #print(get_movies(input_movie_text))
 #get_movies(input_movie_text)
+
+#print(get_titles()[:5])
 
 # END
