@@ -121,7 +121,7 @@ def get_movies(inputTitle):
     titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies.tsv'
 
     # imdb US Titles only ids (Extracted from title.akas.tsv)
-    titles_us_ids_only_file = f'{file_dir}/US_title_ids.csv'
+    titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
 
     # imdb Ratings data (Derived from title.ratings.tsv)
     ratings_data_file = f'{file_dir}/title_ratings.csv'
