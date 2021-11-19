@@ -22,7 +22,7 @@ def get_inputTitle_info(inputTitle):
     file_dir = os.path.join("Data")
 
     # imdb Titles metadata (Extracted from title.basics.tsv)
-    titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies.tsv'
+    titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies_no_nulls.tsv'
 
     # imdb US Titles only ids (Extracted from title.akas.tsv)
     titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
@@ -73,11 +73,12 @@ def get_inputTitle_info(inputTitle):
 
     # Drop titles_metadata Rows with "\N" for genres and startYear
     # Drop titleType isAdult and endYear Columns
+    # Note: If using title_basics_non-adult_movies_no_nulls.tsv, 'endYear' has already been removed.
 
     titles_metadata = titles_metadata.loc[~(titles_metadata['genres'] == "\\N") & ~(titles_metadata['startYear'] == "\\N")]
     titles_metadata.drop(['titleType'], axis=1, inplace=True)
     titles_metadata.drop(['isAdult'], axis=1, inplace=True)
-    titles_metadata.drop(['endYear'], axis=1, inplace=True)
+    #titles_metadata.drop(['endYear'], axis=1, inplace=True)
 
 
     # Convert startYear Column to int
@@ -118,7 +119,7 @@ def get_movies(inputTitle):
     file_dir = os.path.join("Data")
 
     # imdb Titles metadata (Extracted from title.basics.tsv)
-    titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies.tsv'
+    titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies_no_nulls.tsv'
 
     # imdb US Titles only ids (Extracted from title.akas.tsv)
     titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
@@ -175,11 +176,12 @@ def get_movies(inputTitle):
 
     # Drop titles_metadata Rows with "\N" for genres and startYear
     # Drop titleType isAdult and endYear Columns
+    # Note: If using title_basics_non-adult_movies_no_nulls.tsv, 'endYear' has already been removed.
 
     titles_metadata = titles_metadata.loc[~(titles_metadata['genres'] == "\\N") & ~(titles_metadata['startYear'] == "\\N")]
     titles_metadata.drop(['titleType'], axis=1, inplace=True)
     titles_metadata.drop(['isAdult'], axis=1, inplace=True)
-    titles_metadata.drop(['endYear'], axis=1, inplace=True)
+    #titles_metadata.drop(['endYear'], axis=1, inplace=True)
 
 
     # Convert startYear Column to int
@@ -411,6 +413,7 @@ def get_movies(inputTitle):
 #input_movie_text = "Sleepless in Seattle"
 #input_movie_text = "The Killing"
 #input_movie_text = "From Russia with Love"
+#input_movie_text = "Toy Story"
 
 #print(get_movies(input_movie_text))
 #get_movies(input_movie_text)
