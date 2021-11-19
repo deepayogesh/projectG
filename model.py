@@ -83,6 +83,11 @@ def get_titles():
     titles_list = titles_metadata['primaryTitle'].tolist()
 
 
+    # Sort titles_list Alphabetically in Ascending Order
+
+    titles_list.sort(reverse=False)
+
+
     return titles_list
 
 def get_inputTitle_info(inputTitle):
