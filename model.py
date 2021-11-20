@@ -4,42 +4,68 @@
 # ## Part 0: Import Dependencies and Set-Up
 
 # Import Dependencies
+import config
 import numpy as np
 import os
 import pandas as pd
+import psycopg2
 import random
-#from scipy.spatial import distance
 from scipy.spatial.distance import cdist
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import MinMaxScaler, MultiLabelBinarizer, StandardScaler
+#from sqlalchemy import create_engine
 import time
+
+
 
 
 def get_titles():
 
+    # Configure AWS RDS Connection:
+
+    engine = psycopg2.connect (
+            database=config.db_database,
+            user=config.db_user,
+            password=config.db_password,
+            host=config.db_host,
+            port=config.db_port
+            )
 
     # Path to file directory and variables for input files.
-    file_dir = os.path.join("Data")
+    #file_dir = os.path.join("Data")
 
     # imdb Titles metadata (Extracted from title.basics.tsv)
-    titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies_no_nulls.tsv'
+    #titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies_no_nulls.tsv'
 
     # imdb US Titles only ids (Extracted from title.akas.tsv)
-    titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
+    #titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
 
     # imdb Ratings data (Derived from title.ratings.tsv)
-    ratings_data_file = f'{file_dir}/title_ratings.csv'
+    #ratings_data_file = f'{file_dir}/title_ratings.csv'
 
 
 
     # ## Part 1: Import Data, Clean and Transform Data
 
     # Import imdb Titles metadata, imdb US Title IDs, imdb Ratings data
+    # From Local CSV
 
-    titles_metadata = pd.read_csv(titles_metadata_file, sep='\t')
-    titles_us_ids_only = pd.read_csv(titles_us_ids_only_file)
-    ratings_data = pd.read_csv(ratings_data_file)
+    #titles_metadata = pd.read_csv(titles_metadata_file, sep='\t')
+    #titles_us_ids_only = pd.read_csv(titles_us_ids_only_file)
+    #ratings_data = pd.read_csv(ratings_data_file)
+
+    # Import imdb Titles metadata, imdb US Title IDs, imdb Ratings data
+    # From AWS RDS
+
+    import_query = "SELECT * FROM g_mvs_title_basics"
+    titles_metadata = pd.read_sql(import_query, engine)
+
+    import_query = "SELECT * FROM g_mvs_us_title_ids"
+    titles_us_ids_only = pd.read_sql(import_query, engine)
+
+    import_query = "SELECT * FROM g_mvs_title_ratings"
+    ratings_data = pd.read_sql(import_query, engine)
 
 
     # Drop all Titles where primaryTitle differs from originalTitle
@@ -90,32 +116,55 @@ def get_titles():
 
     return titles_list
 
+
 def get_inputTitle_info(inputTitle):
 
+    viewerTitle = inputTitle
+
+    # Configure AWS RDS Connection:
+
+    engine = psycopg2.connect (
+            database=config.db_database,
+            user=config.db_user,
+            password=config.db_password,
+            host=config.db_host,
+            port=config.db_port
+            )
 
     # Path to file directory and variables for input files.
-    file_dir = os.path.join("Data")
+    #file_dir = os.path.join("Data")
 
     # imdb Titles metadata (Extracted from title.basics.tsv)
-    titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies_no_nulls.tsv'
+    #titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies_no_nulls.tsv'
 
     # imdb US Titles only ids (Extracted from title.akas.tsv)
-    titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
+    #titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
 
     # imdb Ratings data (Derived from title.ratings.tsv)
-    ratings_data_file = f'{file_dir}/title_ratings.csv'
+    #ratings_data_file = f'{file_dir}/title_ratings.csv'
 
-
-    viewerTitle = inputTitle
 
 
     # ## Part 1: Import Data, Clean and Transform Data
 
     # Import imdb Titles metadata, imdb US Title IDs, imdb Ratings data
+    # From Local CSV
 
-    titles_metadata = pd.read_csv(titles_metadata_file, sep='\t')
-    titles_us_ids_only = pd.read_csv(titles_us_ids_only_file)
-    ratings_data = pd.read_csv(ratings_data_file)
+    #titles_metadata = pd.read_csv(titles_metadata_file, sep='\t')
+    #titles_us_ids_only = pd.read_csv(titles_us_ids_only_file)
+    #ratings_data = pd.read_csv(ratings_data_file)
+
+    # Import imdb Titles metadata, imdb US Title IDs, imdb Ratings data
+    # From AWS RDS
+
+    import_query = "SELECT * FROM g_mvs_title_basics"
+    titles_metadata = pd.read_sql(import_query, engine)
+
+    import_query = "SELECT * FROM g_mvs_us_title_ids"
+    titles_us_ids_only = pd.read_sql(import_query, engine)
+
+    import_query = "SELECT * FROM g_mvs_title_ratings"
+    ratings_data = pd.read_sql(import_query, engine)
 
 
     # Drop all Titles where primaryTitle differs from originalTitle
@@ -148,7 +197,7 @@ def get_inputTitle_info(inputTitle):
 
     # Drop titles_metadata Rows with "\N" for genres and startYear
     # Drop titleType isAdult and endYear Columns
-    # Note: If using title_basics_non-adult_movies_no_nulls.tsv, 'endYear' has already been removed.
+    # Note: If using title_basics_non-adult_movies_no_nulls.tsv, 'endYear' and "\N" has already been removed.
 
     #titles_metadata = titles_metadata.loc[~(titles_metadata['genres'] == "\\N") & ~(titles_metadata['startYear'] == "\\N")]
     #titles_metadata.drop(['titleType'], axis=1, inplace=True)
@@ -185,40 +234,57 @@ def get_inputTitle_info(inputTitle):
 
     return inputTitle_info_dict
 
+
 def get_movies(inputTitle):
 
     start_time = time.time()
 
+    viewerTitle = inputTitle
+
+    # Configure AWS RDS Connection:
+
+    engine = psycopg2.connect (
+            database=config.db_database,
+            user=config.db_user,
+            password=config.db_password,
+            host=config.db_host,
+            port=config.db_port
+            )
 
     # Path to file directory and variables for input files.
-    file_dir = os.path.join("Data")
+    #file_dir = os.path.join("Data")
 
     # imdb Titles metadata (Extracted from title.basics.tsv)
-    titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies_no_nulls.tsv'
+    #titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies_no_nulls.tsv'
 
     # imdb US Titles only ids (Extracted from title.akas.tsv)
-    titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
+    #titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
 
     # imdb Ratings data (Derived from title.ratings.tsv)
-    ratings_data_file = f'{file_dir}/title_ratings.csv'
+    #ratings_data_file = f'{file_dir}/title_ratings.csv'
 
-
-    # Set Viewer Title for Testing
-    #viewerTitle = "Apocalypse Now"
-    #viewerTitle = "The Maltese Falcon (1941)"
-    #viewerTitle = "Toy Story"
-    #viewerTitle = "Witness (1985)"
-
-    viewerTitle = inputTitle
 
 
     # ## Part 1: Import Data, Clean and Transform Data
 
     # Import imdb Titles metadata, imdb US Title IDs, imdb Ratings data
+    # From Local CSV
 
-    titles_metadata = pd.read_csv(titles_metadata_file, sep='\t')
-    titles_us_ids_only = pd.read_csv(titles_us_ids_only_file)
-    ratings_data = pd.read_csv(ratings_data_file)
+    #titles_metadata = pd.read_csv(titles_metadata_file, sep='\t')
+    #titles_us_ids_only = pd.read_csv(titles_us_ids_only_file)
+    #ratings_data = pd.read_csv(ratings_data_file)
+
+    # Import imdb Titles metadata, imdb US Title IDs, imdb Ratings data
+    # From AWS RDS
+
+    import_query = "SELECT * FROM g_mvs_title_basics"
+    titles_metadata = pd.read_sql(import_query, engine)
+
+    import_query = "SELECT * FROM g_mvs_us_title_ids"
+    titles_us_ids_only = pd.read_sql(import_query, engine)
+
+    import_query = "SELECT * FROM g_mvs_title_ratings"
+    ratings_data = pd.read_sql(import_query, engine)
 
 
     # Drop all Titles where primaryTitle differs from originalTitle
@@ -251,7 +317,7 @@ def get_movies(inputTitle):
 
     # Drop titles_metadata Rows with "\N" for genres and startYear
     # Drop titleType isAdult and endYear Columns
-    # Note: If using title_basics_non-adult_movies_no_nulls.tsv, 'endYear' has already been removed.
+    # Note: If using title_basics_non-adult_movies_no_nulls.tsv, 'endYear' and "\N" has already been removed.
 
     #titles_metadata = titles_metadata.loc[~(titles_metadata['genres'] == "\\N") & ~(titles_metadata['startYear'] == "\\N")]
     #titles_metadata.drop(['titleType'], axis=1, inplace=True)
@@ -480,7 +546,8 @@ def get_movies(inputTitle):
 
     return recommendation_list
 
-# main
+
+# main for Testing
 
 #input_movie_text = input("Movie Title: ")
 
@@ -491,7 +558,6 @@ def get_movies(inputTitle):
 #input_movie_text = "Toy Story"
 
 #print(get_movies(input_movie_text))
-#get_movies(input_movie_text)
 
 #print(get_titles()[:5])
 

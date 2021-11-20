@@ -1,7 +1,7 @@
 # Import Dependencies
 from flask import Flask, render_template, redirect, url_for, request
 import numpy as np
-import re
+#import re
 from sqlalchemy import create_engine
 import psycopg2
 from config import db_password
