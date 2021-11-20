@@ -14,10 +14,7 @@ from scipy.spatial.distance import cdist
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import MinMaxScaler, MultiLabelBinarizer, StandardScaler
-#from sqlalchemy import create_engine
 import time
-
-
 
 
 def get_titles():
@@ -66,6 +63,10 @@ def get_titles():
 
     import_query = "SELECT * FROM g_mvs_title_ratings"
     ratings_data = pd.read_sql(import_query, engine)
+
+
+    # Close AWS RDS Connection:
+    engine.close()
 
 
     # Drop all Titles where primaryTitle differs from originalTitle
@@ -166,6 +167,8 @@ def get_inputTitle_info(inputTitle):
     import_query = "SELECT * FROM g_mvs_title_ratings"
     ratings_data = pd.read_sql(import_query, engine)
 
+    # Close AWS RDS Connection:
+    engine.close()
 
     # Drop all Titles where primaryTitle differs from originalTitle
     # (Since language of titles is not often available, this is an attempt
@@ -286,6 +289,8 @@ def get_movies(inputTitle):
     import_query = "SELECT * FROM g_mvs_title_ratings"
     ratings_data = pd.read_sql(import_query, engine)
 
+    # Close AWS RDS Connection:
+    engine.close()
 
     # Drop all Titles where primaryTitle differs from originalTitle
     # (Since language of titles is not often available, this is an attempt
@@ -556,6 +561,8 @@ def get_movies(inputTitle):
 #input_movie_text = "The Killing"
 #input_movie_text = "From Russia with Love"
 #input_movie_text = "Toy Story"
+
+#print("Generating Recommendations...")
 
 #print(get_movies(input_movie_text))
 
