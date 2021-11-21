@@ -183,7 +183,7 @@ def get_inputTitle_info(inputTitle):
     duplicate_titles_df = pd.concat(g for _, g in titles_metadata.groupby('primarytitle') if len(g) > 1)
 
     duplicate_titles_df['primarytitle'] = duplicate_titles_df.apply(lambda row: "".join([row['primarytitle'], " (", str(row['startyear']), ")"]), axis=1)
-    duplicate_titles_df['originalTitle'] = duplicate_titles_df['primarytitle']
+    duplicate_titles_df['originaltitle'] = duplicate_titles_df['primarytitle']
 
 
     # Merge duplicate_titles_df back with titles_metadata
@@ -231,7 +231,7 @@ def get_inputTitle_info(inputTitle):
     inputTitle_info_dict = {}
 
     inputTitle_info_dict['url'] = movies_df.loc[movies_df['primarytitle'] == inputTitle]['url'].values[0]
-    inputTitle_info_dict['releaseYear'] = movies_df.loc[movies_df['primarytitle'] == inputTitle]['startyear'].values[0]
+    inputTitle_info_dict['releaseyear'] = movies_df.loc[movies_df['primarytitle'] == inputTitle]['startyear'].values[0]
     inputTitle_info_dict['averagerating'] = movies_df.loc[movies_df['primarytitle'] == inputTitle]['averagerating'].values[0]
     inputTitle_info_dict['genres'] = movies_df.loc[movies_df['primarytitle'] == inputTitle]['genres'].values[0].replace(",", ", ")
 
@@ -305,7 +305,7 @@ def get_movies(inputTitle):
     duplicate_titles_df = pd.concat(g for _, g in titles_metadata.groupby('primarytitle') if len(g) > 1)
 
     duplicate_titles_df['primarytitle'] = duplicate_titles_df.apply(lambda row: "".join([row['primarytitle'], " (", str(row['startyear']), ")"]), axis=1)
-    duplicate_titles_df['originalTitle'] = duplicate_titles_df['primarytitle']
+    duplicate_titles_df['originaltitle'] = duplicate_titles_df['primarytitle']
 
 
     # Merge duplicate_titles_df back with titles_metadata
@@ -506,7 +506,7 @@ def get_movies(inputTitle):
     recommendation_index = list(distance_results[0]).index(entry)
     recommendation_dict['title'] = clustered_df.iloc[recommendation_index]['primarytitle']
     recommendation_dict['url'] = clustered_df.iloc[recommendation_index]['url']
-    recommendation_dict['releaseYear'] = clustered_df.iloc[recommendation_index]['startyear']
+    recommendation_dict['releaseyear'] = clustered_df.iloc[recommendation_index]['startyear']
     recommendation_dict['averagerating'] = clustered_df.iloc[recommendation_index]['averagerating']
     recommendation_dict['genres'] = clustered_df.iloc[recommendation_index]['genres'].replace(",", ", ")
 
@@ -537,7 +537,7 @@ def get_movies(inputTitle):
 
         recommendation_dict['title'] = clustered_df.iloc[recommendation_index]['primarytitle']
         recommendation_dict['url'] = clustered_df.iloc[recommendation_index]['url']
-        recommendation_dict['releaseYear'] = clustered_df.iloc[recommendation_index]['startyear']
+        recommendation_dict['releaseyear'] = clustered_df.iloc[recommendation_index]['startyear']
         recommendation_dict['averagerating'] = clustered_df.iloc[recommendation_index]['averagerating']
         recommendation_dict['genres'] = clustered_df.iloc[recommendation_index]['genres'].replace(",", ", ")
 
