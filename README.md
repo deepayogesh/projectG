@@ -22,7 +22,7 @@ Create tables to store movie data
 K-MEANS MACHINE and Hierarchical Learning model has been used for our training and testing setup.
 
 
-### Flask App
+### Dashboard
 We have made an HTML based UI which takes the user input of movie titles and calls the flask app from the UI which will execute the K means model we are building to get the list of recommended movies which Flask app will return to render it on the UI.
 
 ### Presentation in Google Slides.
@@ -92,9 +92,7 @@ Once above step is completed, we perform the Primary Component Analysis to reduc
 
 ## Dashboard
 
-
-
-
+![movies_recommendation_engine_goldfinger](https://user-images.githubusercontent.com/85711507/142745152-8562626d-e67b-42b2-84b3-ede8d7b560f9.png)
 
 
 ## Result of Analysis
