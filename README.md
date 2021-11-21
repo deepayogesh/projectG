@@ -1,8 +1,6 @@
 # Project Movie Recommendation
 ## Selected Topic
 
-Tom2 Branch.
-
 Creating a movie suggestion algorithm based on watch history.
 
 ## Reason for Selecting the topic
