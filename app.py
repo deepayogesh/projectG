@@ -24,9 +24,17 @@ def index():
 
     if request.method == "POST":
         try:
+            # Get Input Movie from User
             movie = request.form['inputMovie']
-            input_title_info = model.get_inputTitle_info(movie)
-            recommendations = model.get_movies(movie)
+
+            # Get List of Available Titles from Source Data
+            available_titles = model.get_titles()
+
+            if (movie in available_titles):
+                input_title_info = model.get_inputTitle_info(movie)
+                recommendations = model.get_movies(movie)
+            else:
+                movie = movie + " - Title Not Found"
 
         except:
             errors.append(

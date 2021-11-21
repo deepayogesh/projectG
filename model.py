@@ -549,6 +549,8 @@ def get_movies(inputTitle):
     # Sort recommendatioin_list by 'averageRating'
     recommendation_list = sorted(recommendation_list, key=lambda d: d['averagerating'], reverse=True)
 
+    print(recommendation_list)
+
     return recommendation_list
 
 

@@ -18,14 +18,25 @@
         <button type="submit" class="btn btn-default">Get Recommendations</button>
       </form>
     </div>
-    <h2>Input Movie Information:</h2>
-    <h4>Title: {{ movie }}</h4>
-    <h4>URL: <a style="font-size: 75%;" href="{{ input_title_info['url'] }}">{{ input_title_info['url'] }}</a></h4>
-    <h4>Release Year: {{ input_title_info['releaseyear'] }}</h4>
-    <h4>Average Rating: {{ input_title_info['averagerating'] }}</h4>
-    <h4>Genres: {{ input_title_info['genres'] }}</h4>
 
-    <h2>Recommendations:</h2>
+    {% if recommendations|length > 0 %}
+      <!-- RUNS IF MODEL WAS SUCCESSFULLY CALLED -->
+      <h2>You Just Watched:</h2>
+      <h4>Title: {{ movie }}</h4>
+      <h4>URL: <a style="font-size: 75%;" href="{{ input_title_info['url'] }}">{{ input_title_info['url'] }}</a></h4>
+      <h4>Release Year: {{ input_title_info['releaseyear'] }}</h4>
+      <h4>Average Rating: {{ input_title_info['averagerating'] }}</h4>
+      <h4>Genres: {{ input_title_info['genres'] }}</h4>
+
+      <h2>Since you watched `{{ movie }}`</h2>
+      <h3>You might also like:</h3>
+
+    {% elif movie|length > 0 %}
+      <!-- RUNS AFTER MODEL IS EXECUTED IF MOVIE NOT FOUND IN LIST OF TITLES -->
+      <h2>You Just Watched:</h2>
+      <h4>Title: {{ movie }}</h4>
+
+    {% endif %}
 
     <table>
       <tr>
