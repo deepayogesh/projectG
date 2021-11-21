@@ -1,17 +1,11 @@
 # Project Movie Recommendation
 
-
-Creating a movie suggestion algorithm based on watch history.
-=======
-=======
 ## Overview of Analysis
-Our movie recommendation engine creates a movie suggestion algorithm based on the user's watched history. When user inputs the movie title on the dashboard, it dynamically displays the metadata of the selected movie like the title, IMDB url, release year, average rating and tagged genres. On pressing the "Show Recommendation" button, it calls our flask app which invoked the K means ML model to bring a list of 5 recommendations for the input movie.
-
-
+Our movie recommendation engine creates a movie suggestion algorithm based on the user's choice of a movie they enjoyed. When user inputs the movie title on the dashboard, it dynamically displays the metadata of the selected movie like the title, IMDB url, release year, average rating and tagged genres. On pressing the "Get Recommendations" button, it calls our flask app which invokes the K means ML model to bring a list of 5 recommendations for the input movie.
 
 
 ## Communication protocols
-We have four members in our team. All the 4 members of this team had specific roles throughout the project. We used Slack, video chat and git commits to communicate the project progress internally. We meet every week to share the updates and discuss any issues we are facing.
+We have four members in our team. All the 4 members of this team had specific roles throughout the project. We used Slack, video chat and git commits to communicate the project progress internally. We met every week to share the updates and discuss any issues we were facing.
 
 ## Project Outline
 ### Getting and Storing Data
@@ -25,18 +19,18 @@ Create tables to store movie data
 
 
 ### Machine Learning Model
-K-MEANS MACHINE and Hierarchical Learning model has been used for our training and testing setup.
+K-MEANS and Hierarchical clustering machine learning models were tested for clustering output.
 
 
 ### Dashboard
-We have made an HTML based UI which takes the user input of movie titles and calls the flask app from the UI which will execute the K means model we are building to get the list of recommended movies which Flask app will return to render it on the UI.
+We have made an HTML based UI which takes the user input of movie title and calls the flask app from the UI which will execute the K means model we have build to get the list of recommended movies which Flask app will return to render it on the UI.
 
 ### Presentation in Google Slides.
 
 
 ## Technologies used
 
-<img width="640" alt="Technologies used" src="https://user-images.githubusercontent.com/85711507/142743488-353115cf-50e0-436e-846f-95f25575fed4.png">
+<img width="591" alt="Technologies used" src="https://user-images.githubusercontent.com/85711507/142773332-806a9c42-5809-4a4f-956b-d3bf2ee5b5c4.png">
 
 
 
@@ -88,31 +82,25 @@ perl -F"\t" -lne 'print $F[0]."\t".$F[1]."\t".$F[2]."\t".$F[3]."\t".$F[4]."\t".$
 
 
 ## Database
-We used the AWS RDS database to store the IMDB Movie Titles, their IDs and corresponding ratings in g_mvs_title_basics, g_mvs_us_little_ids and g_mvs_title_rating table respectively. As part of the training data preparation, we dropped the data where movies with primary title differs from the original title, or in case their IDs are missing or movie year is earlier than 1920. As part of the last step, we merged the movie title metadata with ratings data on the title ID and augment it with the IMDB title URL.
+We used the AWS RDS database to store the IMDB Movie Titles, their IDs and corresponding ratings in g_mvs_title_basics, g_mvs_us_little_ids and g_mvs_title_rating table respectively. As part of the data preparation, we dropped the data where movies with primary title differs from the original title, or in case their IDs are missing or movie year is earlier than 1920. As part of the last step, we merged the movie title metadata with ratings data on the title ID and augment it with the IMDB title URL.
 
 ## Machine Learning Models
 
 Once data preparation is done, we used the multi label bin analyzer to transform the converted genres lists. This transformed data frame ‘X’ is then merged with the prepared movies dataframe (as part of the data preparation step). We also merged the average rating in the transformed DF using primary title as a new index. 
 
-Once above step is completed, we perform the Primary Component Analysis to reduce the dimensions with only three primary principal components and named them “PC 1”, “PC 2” and “PC 3”. As our final step, we performed the K means clustering using k=4 and fit the model. As a disclaimer, we also tried using the hierarchical model, but it being extremely resource intensive, was dropped in favor of the K means model. Once  K means model fits well, it is used to make the movie recommendation.
+Once above step is completed, we perform the Primary Component Analysis to reduce the dimensions with only three primary principal components and named them “PC 1”, “PC 2” and “PC 3”. As our final step, we performed the K means clustering using k=4 and fit the model since we had previously determined that 4 was the ideal number for elbow curve. As a disclaimer, we also tried using the hierarchical model, but it being extremely resource intensive, was dropped in favor of the K means model. Once  K means model fits well, it is used to make the movie recommendation.
 
 ## Dashboard
 
 ![movies_recommendation_engine_goldfinger](https://user-images.githubusercontent.com/85711507/142745152-8562626d-e67b-42b2-84b3-ede8d7b560f9.png)
 
-
 ## Result of Analysis
 
-
-
-
-
+For most movies we input in the recommendation engine we get good recommendation from subjective point of view. For example when we input Jurassic park and click on "Get recommendation" button the out put is all relevant movies which user would prefer to watch. We tested handful of random movies from many different genres and we subjectively analyzed the results and all of them appeared to be good recommendations.  
 
 
 ## Recommendations for Future Analysis
-For future analysis we would build a more robust algorithm
-
-
+For future enhancements, we would build a more robust algorithm and also would apply genres as the output filter. This was a very challenging task and required more time to implement. More inputs based on individual ratings data can be applied in order to build a robust recommendation engine. A larger selection criteria can as well be implemented in order for user to provide with more options. Displaying the movie posters on the flask app would definitely make the recommendation engine look more appealing to the audience. All these recommendations would definitely help in building a better recommendation engine for user. 
 
 
 ## What the Team would do differently
