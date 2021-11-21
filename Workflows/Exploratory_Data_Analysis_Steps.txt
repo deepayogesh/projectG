@@ -1,0 +1,44 @@
+
+Exploratory Data Analysis Steps
+===============================
+
+0. Download data from https://datasets.imdbws.com/
+	- title.basics.tsv.gz (11/12/2021)
+	- title.akas.tsv.gz (11/12/2021)
+	- title.ratings.tsv.gz (11/11/2021)
+   
+   Dataset Details can be viewed at https://www.imdb.com/interfaces/
+
+1. Unzip all three files to *.tsv
+
+2. Rename title.basics.tsv to title_basics.tsv
+   Since title_basics.tsv is 700 mb in its original form, filter entries on
+   a Bash Terminal prior to loading into Python using the following
+   command, which filters entries only to Non-Adult Movie Titles with No NULLS
+   ('endYear' column is dropped in process):
+
+perl -F"\t" -lne 'print $F[0]."\t".$F[1]."\t".$F[2]."\t".$F[3]."\t".$F[4]."\t".$F[5]."\t".$F[7]."\t".$F[8]' title_basics.tsv | perl -F"\t" -lne 'print if $.==1 || ($_!~/\\N/ && $F[1]=~/movie/ && $F[4]=~/0/ && $F[7]!~/Adult/)' > title_basics_non-adult_movies_no_nulls.tsv
+
+3. Rename title.akas.tsv to title_akas.tsv
+   Obtain US-only Title IDs from title_akas.tsv
+   using the following command on a Bash Terminal:
+
+   awk -F"\t" 'NR==1 || $4~/US/{print $1}' title_akas.tsv | sort | uniq > US_title_ids.csv
+
+4. Rename title.ratings.tsv to title_ratings.tsv
+   Convert title_ratings.tsv to CSV via the following
+   command on a Bash Termainal:
+
+   cat title_ratings.tsv | tr "\t" "," > title_ratings.csv
+
+5. Perform subsequent exploratory data analysis and data cleaning using Python running within
+Jupyter Notebook.
+
+	- Remove Titles where primaryTitle is not the same as originalTitle in
+	  order to filter out films which were US Releases of Foreign Films.
+	- In order to guarantee title uniqueness for remakes, search for
+	  duplicate primaryTitle and concatenate Film Release Year to the
+	  primaryTitle.
+	- Filter Titles for Title IDs that are only present in the
+	  titles_us_ids_only list.
+	- Include Titles only released in 1920 or later.

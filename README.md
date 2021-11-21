@@ -1,7 +1,9 @@
 # Project Movie Recommendation
 
+=======
 ## Overview of Analysis
 Our movie recommendation engine creates a movie suggestion algorithm based on the user's watched history. When user inputs the movie title on the dashboard, it dynamically displays the metadata of the selected movie like the title, IMDB url, release year, average rating and tagged genres. On pressing the "Show Recommendation" button, it calls our flask app which invoked the K means ML model to bring a list of 5 recommendations for the input movie.
+
 
 
 ## Communication protocols

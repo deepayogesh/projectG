@@ -1,0 +1,13 @@
+
+pgAdmin_Database_Tables_Creation
+================================
+
+0. Open pgAdmin
+
+1. Create new Database, 'g-mvs'
+
+2. Create Tables by running SQL Statements
+   contained in g-mvs-CreateTables_Tom2-db.sql
+   from Query Tool
+
+3. 

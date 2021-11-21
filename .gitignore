@@ -1,5 +1,7 @@
 # USER Section
-title_basics.tsv
+config.py
+config_old.py
+model_backup.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
