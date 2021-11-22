@@ -26,6 +26,7 @@ K-MEANS and Hierarchical clustering machine learning models were tested for clus
 We have made an HTML based UI which takes the user input of movie title and calls the flask app from the UI which will execute the K means model we have build to get the list of recommended movies which Flask app will return to render it on the UI.
 
 ### Presentation in Google Slides.
+ https://docs.google.com/presentation/d/1tgqQFmfIOF4AMteqZtrhcAjbesh_rU_qWRb9vEfeG2g/edit?usp=sharing
 
 
 ## Technologies used
