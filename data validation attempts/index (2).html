@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Movies Recommendation Engine</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static/css/style.css">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+</head>
+
+
+<body>
+  <div class="container-fluid">
+    <div class="jumbotron text-center">
+      <h1>Movies Recommendation Engine</h1>
+      <form autocomplete="off" method="POST">
+        <div class="autocomplete" style="width:300px;">
+          <input id="myMovie" type="text" name="myMovie" placeholder="Goldfinger" id="viewerTitleHTML">
+        </div>
+        <button type="submit" class="btn btn-default">Get Recommendations</button>
+      </form>
+      
+      <script>
+      function autocomplete(inp, arr, limit) {
+        /*the autocomplete function takes three arguments,
+        the text field element, an array of possible autocompleted values, and the limit of suggestions:*/
+        var currentFocus;
+        limit = limit || 10;
+        /*execute a function when someone writes in the text field:*/
+        inp.addEventListener("input", function(e) {
+            var a, b, i, val = this.value;
+            /*close any already open lists of autocompleted values*/
+            closeAllLists();
+            if (!val) { return false;}
+            currentFocus = -1;
+            /*create a DIV element that will contain the items (values):*/
+            a = document.createElement("DIV");
+            a.setAttribute("id", this.id + "autocomplete-list");
+            a.setAttribute("class", "autocomplete-items");
+            /*append the DIV element as a child of the autocomplete container:*/
+            this.parentNode.appendChild(a);
+            /*for each item in the array...*/
+            for (i = 0, numRes = 0; i < arr.length; i++) {
+              /*check if the item starts with the same letters as the text field value:*/
+              if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                /*limit the number of suggestions*/
+                if (numRes++ >= limit) {
+                break;
+                }  
+                /*create a DIV element for each matching element:*/
+                b = document.createElement("DIV");
+                /*make the matching letters bold:*/
+                b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                b.innerHTML += arr[i].substr(val.length);
+                /*insert a input field that will hold the current array item's value:*/
+                b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                /*execute a function when someone clicks on the item value (DIV element):*/
+                b.addEventListener("click", function(e) {
+                    /*insert the value for the autocomplete text field:*/
+                    inp.value = this.getElementsByTagName("input")[0].value;
+                    /*close the list of autocompleted values,
+                    (or any other open lists of autocompleted values:*/
+                    closeAllLists();
+                });
+                a.appendChild(b);
+              }
+            }
+        });
+        /*execute a function presses a key on the keyboard:*/
+        inp.addEventListener("keydown", function(e) {
+            var x = document.getElementById(this.id + "autocomplete-list");
+            if (x) x = x.getElementsByTagName("div");
+            if (e.keyCode == 40) {
+              /*If the arrow DOWN key is pressed,
+              increase the currentFocus variable:*/
+              currentFocus++;
+              /*and and make the current item more visible:*/
+              addActive(x);
+            } else if (e.keyCode == 38) { //up
+              /*If the arrow UP key is pressed,
+              decrease the currentFocus variable:*/
+              currentFocus--;
+              /*and and make the current item more visible:*/
+              addActive(x);
+            } else if (e.keyCode == 13) {
+              /*If the ENTER key is pressed, prevent the form from being submitted,*/
+              e.preventDefault();
+              if (currentFocus > -1) {
+                /*and simulate a click on the "active" item:*/
+                if (x) x[currentFocus].click();
+              }
+            }
+        });
+        function addActive(x) {
+          /*a function to classify an item as "active":*/
+          if (!x) return false;
+          /*start by removing the "active" class on all items:*/
+          removeActive(x);
+          if (currentFocus >= x.length) currentFocus = 0;
+          if (currentFocus < 0) currentFocus = (x.length - 1);
+          /*add class "autocomplete-active":*/
+          x[currentFocus].classList.add("autocomplete-active");
+        }
+        function removeActive(x) {
+          /*a function to remove the "active" class from all autocomplete items:*/
+          for (var i = 0; i < x.length; i++) {
+            x[i].classList.remove("autocomplete-active");
+          }
+        }
+        function closeAllLists(elmnt) {
+          /*close all autocomplete lists in the document,
+          except the one passed as an argument:*/
+          var x = document.getElementsByClassName("autocomplete-items");
+          for (var i = 0; i < x.length; i++) {
+            if (elmnt != x[i] && elmnt != inp) {
+              x[i].parentNode.removeChild(x[i]);
+            }
+          }
+        }
+        /*execute a function when someone clicks in the document:*/
+        document.addEventListener("click", function (e) {
+            closeAllLists(e.target);
+        });
+      }
+      
+      /*An array containing all movies in our dataset:*/
+      var movieList = ["Dodge City Trail", "Charley's Aunt (1925)", "The Deadlier Sex", "My Husband's Other Wife", "Nachtgestalten (1920)", "A Tale of Two Worlds", "813", "'If Only' Jim", "The Adventurer (1920)", "The Adventures of Bob and Bill", "Alias Jimmy Valentine (1920)", "The Amateur Gentleman (1920)", "April Folly", "An Arabian Knight", "At the Villa Rose", "Below the Surface (1920)", "Billions", "Blind Wives", "The Breath of the Gods", "Bullet Proof (1920)", "The Confession (1920)", "Conrad in Quest of His Youth", "The Copperhead", "The County Fair (1920)", "The Cradle of Courage", "Crooked Streets", "Cynthia of the Minute", "The Dancin' Fool", "Dangerous Days (1920)", "Daredevil Jack", "The Dark Mirror (1920)", "Dead Men Tell No Tales (1920)", "The Devil's Claim", "The Devil's Passkey", "Dinty", "Dollars and Sense", "A Double-Dyed Deceiver", "Down Home (1920)", "Down on the Farm (1920)", "Dr. Jekyll and Mr. Hyde (1920)", "Drag Harlan", "The Dream Cheater", "Elmo the Fearless", "The Empire of Diamonds", "Excuse My Dust (1920)", "The False Road", "The Family Honor (1920)", "Fantomas (1920)", "The Flaming Disc", "The Flapper", "For the Soul of Rafael", "The Fortune Hunter (1920)", "The Fortune Teller (1920)", "The Gift Supreme", "The Girl in Number 29", "The Girl of My Heart (1920)", "Go and Get It", "Good References", "The Great Redeemer", "Hairpins", "Headin' Home", "Helen of Four Gates", "Help Wanted - Male", "Her Elephant Man", "Her Husband's Friend", "Hidden Dangers", "Hitchin' Posts", "Honest Hutch", "The Hound of the Baskervilles (1921)", "Huckleberry Finn (1920)", "Humoresque (1920)", "The Idol Dancer", "If I Were King (1920)", "The Invisible Ray (1920)", "The Jack-Knife Man", "Jes' Call Me Jim", "The Joyous Trouble-Makers", "Just Pals", "Kismet (1920)", "The Last of the Mohicans (1920)", "Lederstrumpf, 1. Teil: Der WildtÃ¶ter und Chingachgook", "The Leopard Woman", "The Life of the Party (1920)", "The Lost City (1920)", "The Love Expert", "The Love Flower", "Love, Honor and Behave!", "The Luck of the Irish (1920)", "The Man Who Lost Himself (1920)", "A Man from Nowhere", "A Manhattan Knight", "The Mark of Zorro (1920)", "Mid-Channel", "Midsummer Madness (1920)", "Miss Nobody (1920)", "The Mollycoddle", "The Mutiny of the Elsinore", "Nomads of the North", "Number 17", "Nurse Marjorie", "An Old Fashioned Boy", "Over the Hill to the Poorhouse", "The Penalty (1920)", "The Phantom Foe", "Pink Tights", "Pirate Gold", "Polly with a Past", "Pollyanna (1920)", "The Price of Redemption", "The Prince of Avenue A", "Remodeling Her Husband", "The Restless Sex", "The Revenge of Tarzan", "Robbery Under Arms (1920)", "Rogues and Romance", "The Round-up", "Ruth of the Rockies", "Sand (1920)", "The Saphead", "The Screaming Shadow", "Sex (1920)", "The Shadow Between (1920)", "Shipwrecked Among Cannibals", "Shore Acres (1920)", "Sick Abed", "The Sign on the Door", "The Silent Avenger (1920)", "Silk Husbands and Calico Wives", "The Silver Horde (1920)", "So Long Letty (1920)", "Something to Think About", "The Son of Tarzan", "The Soul of Youth", "Stronger Than Death", "Suds (1920)", "Sumurun", "Terror Island", "The Testing Block", "Die Teufelsanbeter", "The Texan (1920)", "The Third Woman", "3 Gold Coins", "Thunderbolt Jack", "The Toll Gate", "Treasure Island (1920)", "Trumpet Island", "Twins of Suffering Creek", "Under Crimson Skies", "The Vanishing Dagger", "Velvet Fingers", "The Virgin of Stamboul", "Way Down East (1920)", "Weltbrand", "What Happened to Rosa", "What Women Want (1920)", "While New York Sleeps (1920)", "Whispering Devils", "The White Dove (1920)", "Why Change Your Wife?", "Within Our Gates (1920)", "A Woman in Grey", "The Woman in the Suitcase", "The Wonder Man", "The Wonderful Chance", "Yes or No", "The Ace of Hearts", "Action (1921)", "The Adventures of Sherlock Holmes (1921)", "Adventures of Tarzan (1921)", "The Affairs of Anatol", "After the Show (1921)", "Alf's Button (1920)", "All Dolled Up", "All Souls' Eve", "Annabelle Lee", "Another Man's Boots", "Appearances (1921)", "The Avenging Arrow", "The Barbarian (1921)", "Be My Wife", "Beach of Dreams", "Beau Revel", "The Big Adventure", "The Big Punch (1921)", "Big Town Ideas", "Black Beauty (1921)", "The Blazing Trail (1921)", "The Blot", "The Blue Fox", "The Bonnie Brier Bush", "Brewster's Millions (1921)", "Buried Treasure", "Burn 'Em Up Barnes (1921)", "Camille (1921)", "Cappy Ricks", "The Child Thou Gavest Me", "Christian Wahnschaffe, 2. Teil - Die Flucht aus dem goldenen Kerker", "A Connecticut Yankee in King Arthur's Court (1921)", "The Conquering Power", "Corinthian Jack", "Crazy to Marry", "The Crimson Skull", "Dangerous Lies (1921)", "Daniel Deronda", "A Daughter of the Law", "Desperate Trails (1921)", "Devil Dog Dawson", "The Devil Within (1921)", "The Devil (1921)", "The Diamond Queen (1921)", "Disraeli (1921)", "The Dollar-a-Year Man", "Don't Tell Everything", "Dream Street (1921)", "Ducks and Drakes", "Enchantment (1921)", "Felix (1921)", "Fighting Fate (1921)", "Fool's Paradise (1921)", "Forbidden Fruit (1921)", "The Four Feathers (1921)", "The Four Horsemen of the Apocalypse (1921)", "The Freeze-Out", "Gasoline Gus", "God's Gold", "Godless Men", "The Great Moment (1921)", "Hail the Woman", "Hamlet (1921)", "His Nibs", "His Own Law (1920)", "The Hope Diamond Mystery", "Hurricane Hutch", "The Iron Trail", "Jackie (1921)", "Jane Eyre (1921)", "The Kid (1921)", "The Killer (1921)", "King, Queen and Joker", "Ladies Must Live (1921)", "Lady Hamilton", "Leap Year (1924)", "Little Lord Fauntleroy (1921)", "The Little Minister (1921)", "Lotus Blossom", "The Lotus Eater", "The Love Light", "Love Never Dies (1921)", "The Love Special", "Madame Peacock", "Mama's Affair", "The Man Tamer", "The Man Who Had Everything", "Man-Woman-Marriage", "A Message from Mars (1921)", "Miss Lulu Bett", "Molly O'", "Montana Bill", "Moonlight Follies", "Morals", "My Boy (1921)", "The Mysterious Pearl", "No Woman Knows", "The Nut", "O'Malley of the Mounted (1921)", "The Old Swimmin' Hole (1921)", "One a Minute", "Orphans of the Storm", "Outside the Law (1920)", "Passion Flower (1921)", "Pearls and Savages", "Peck's Bad Boy (1921)", "A Perfect Crime", "The Princess of New York", "The Queen of Sheba", "Rip Van Winkle (1921)", "A Sailor-Made Man", "The Sea Lion", "Sentimental Tommy", "The Sheik (1921)", "The Silent Call (1921)", "The Single Track", "The Sins of Rosanne", "The Sky Pilot", "A Small Town Idol", "The Sting of the Lash", "Straight Is the Way (1921)", "Stranger Than Fiction (1921)", "Sure Fire (1921)", "Tangled Trails", "La terre", "Terror Trail (1921)", "That Girl Montana", "The Three Musketeers (1921)", "Three Word Brand", "Through the Back Door", "Tol'able David (1921)", "Too Wise Wives", "The Torrent (1921)", "Trailin'", "Uncharted Seas", "Under the Lash", "Vier um die Frau", "Voices of the City", "The Wallop", "What Do Men Want?", "What No Man Knows", "Where Lights Are Low", "Whispering Shadows", "The Whistle (1921)", "White Oak", "The Witching Hour (1921)", "Without Benefit of Clergy", "Woman's Place", "The Wonderful Thing", "According to Hoyle", "Across the Continent", "Adam and Eva", "The Adventures of Robinson Crusoe", "The Altar Stairs", "Anna Ascends", "Back Pay (1922)", "Barb Wire (1922)", "The Beautiful and Damned (1922)", "Beauty's Worth", "The Better Man Wins", "Beyond the Rainbow (1922)", "Beyond the Rocks", "Big Stakes", "Blazing Arrows", "A Blind Bargain", "Blood and Sand (1922)", "The Bonded Woman", "Boomerang Bill", "The Bride's Play", "Broken Chains (1922)", "Captain Fly-by-Night", "Captain Kidd (1922)", "Cardigan", "Come on Over", "Conquering the Woman", "The Crimson Challenge", "Dark Secrets (1923)", "The Dictator (1922)", "Dr. Jack", "A Doll's House (1922)", "Doubling for Romeo", "Down to the Sea in Ships (1922)", "Dusk to Dawn", "East Is West (1922)", "Ebb Tide (1922)", "Extra! Extra!", "The Face in the Fog", "Fair Lady (1922)", "Flames of Passion (1923)", "Flesh and Blood (1922)", "Flesh and Spirit", "A Fool There Was (1922)", "Foolish Wives", "Forget Me Not (1922)", "Fox Farm", "The Ghost Breaker (1922)", "Golden Dreams", "Grandma's Boy (1922)", "Head Over Heels (1922)", "The Headless Horseman", "The Heart Specialist", "Heart's Haven", "Her Gilded Cage", "Her Husband's Trademark", "Hills of Missing Men", "The Hottentot (1922)", "Human Hearts", "Hungry Hearts (1922)", "Hurricane's Gal", "HÃ¤xan", "The Impossible Mrs. Bellew", "The Infidel (1922)", "John Smith (1922)", "The Jungle Goddess", "Just Tony", "The Kentucky Derby", "Kindled Courage", "Kindred of the Dust", "The Lane That Had No Turning", "The Leather Pushers (1922)", "Little Miss Smiles", "Lorna Doone (1922)", "A Lover's Oath", "Lucrezia Borgia (1922)", "The Man from Hell's River", "The Man Who Played God (1922)", "The Man from Beyond", "The Man from Downing Street", "The Man from Home (1922)", "Manslaughter (1922)", "The Married Flapper", "Merry-Go-Round (1923)", "Monte Cristo (1922)", "Moran of the Lady Letty", "My American Wife (1922)", "My Wild Irish Rose (1922)", "Nan of the North", "Nanook of the North", "Nathan der Weise", "Nice People (1922)", "No Trespassing (1922)", "Oliver Twist (1922)", "Omar the Tentmaker", "On the High Seas", "One Exciting Night (1922)", "Partners of the Sunset (1922)", "Peg o' My Heart (1922)", "Perils of the Yukon", "Phantom (1922)", "Polly of the Follies", "The Power of Love (1922)", "The Pride of Palomar", "The Primitive Lover", "The Prisoner of Zenda (1922)", "The Radio King", "The Rapids", "Real Adventure", "Reckless Youth", "Red Hot Romance", "Robin Hood (1922)", "SalomÃ© (1922)", "Saturday Night (1922)", "The Seventh Day (1922)", "Shadows (1922)", "Sherlock Brown", "Sherlock Holmes (1922)", "Silver Wings (1922)", "Sky High (1922)", "Smilin' Through (1922)", "The Snowshoe Trail", "The Song of Love", "South of Northern Lights", "Squibs Wins the Calcutta Sweep", "Tell Your Children (1922)", "Tess of the Storm Country (1922)", "The Third Alarm (1922)", "The Three Must-Get-Theres", "Tillie (1922)", "The Timber Queen", "Timothy's Quest (1922)", "The Toll of the Sea", "The Trap (1922)", "Trapped by the Mormons (1922)", "Trifling Women", "Trouble (1922)", "Turn to the Right", "Under Two Flags (1922)", "Unseeing Eyes", "The Valley of Silent Men", "The Village Blacksmith (1922)", "The Wall Flower", "When Knighthood Was in Flower", "White Eagle (1922)", "Wild Honey (1922)", "With Stanley in Africa", "The Worldly Madonna", "Roman Candles", "Yellow Men and Gold", "The Young Diana", "The Young Rajah", "Adam's Rib (1923)", "All the Brothers Were Valiant (1923)", "Anna Christie (1923)", "Around the World in Eighteen Days", "Ashes of Vengeance", "Beasts of Paradise", "Bella Donna (1923)", "La belle Nivernaise", "Big Dan", "Bluebeard's 8th Wife", "Boston Blackie", "Brass", "The Bright Shawl", "Broken Hearts of Broadway", "Burning Words", "The Call of the Canyon", "Call of the Wild (1923)", "Cameo Kirby (1923)", "A Chapter in Her Life", "The Cheat (1923)", "Circus Days", "A Clouded Name", "The Courtship of Myles Standish", "The Covered Wagon", "The Cricket on the Hearth (1923)", "Cupid's Fireman", "Daddy (1923)", "The Dangerous Maid", "Desert Rider", "Destroying Angel (1923)", "Don Quickshot of the Rio Grande", "Drifting (1923)", "East Side - West Side", "Enemies of Women", "The Eternal City (1923)", "The Extra Girl", "The Face on the Bar-Room Floor", "The Fighting Blade", "Fighting Blood (1923)", "Flaming Youth", "The Fog (1923)", "Fury (1923)", "The Ghost City", "The Gold Diggers (1923)", "The Green Goddess (1923)", "Haldane of the Secret Service", "The Haunted Valley", "Her Dangerous Path", "Hollywood (1923)", "Homeward Bound", "Human Wreckage", "The Hunchback of Notre Dame (1923)", "Is Money Everything?", "The Isle of Lost Ships (1923)", "It Happened Out West (1923)", "Itching Palms", "Jazzmania", "Jealous Husbands", "The Last Hour (1923)", "The Last Moment (1923)", "Law of the Lawless (1923)", "Let's Go (1923)", "Little Church Around the Corner", "The Little Girl Next Door (1923)", "Little Old New York (1923)", "Long Live the King (1923)", "Love, Life and Laughter", "Luck (1923)", "Lucretia Lombard", "The Man Who Won (1923)", "The Marriage Maker", "Mary of the Movies", "Maytime (1923)", "Name the Man!", "North of Hudson Bay", "The Nth Commandment", "Our Hospitality", "Penrod and Sam (1923)", "The Pilgrim (1923)", "Pioneer Trails", "Ponjola", "Prodigal Daughters (1923)", "Quicksands", "Radio-Mania", "Red Lights (1923)", "Richard the Lion-Hearted", "Robin Hood, Jr.", "Rosita (1923)", "Ruggles of Red Gap (1923)", "Ruth of the Range", "Safety Last!", "Sawdust (1923)", "Scaramouche (1923)", "Scarred Hands", "The School for Scandal (1923)", "The Sea Raiders", "Second Hand Love", "Shifting Sands (1922)", "The Shock", "The Shriek of Araby", "The Silent Command", "Slave of Desire", "The Social Buccaneer (1923)", "Soul of the Beast", "Souls for Sale", "The Spanish Dancer (1923)", "The Spider and the Rose", "The Steel Trail", "Stephen Steps Out", "Suzanna", "The Tango Cavalier", "The Temple of Venus", "The Ten Commandments (1923)", "Three Ages", "Three Jumps Ahead", "Three Wise Fools (1923)", "The Thrill Chaser (1923)", "Tiger Rose (1923)", "To the Last Man (1923)", "Trimmed in Scarlet", "The Untameable", "The Virginian (1923)", "Where the North Begins", "While Paris Sleeps (1923)", "The White Rose (1923)", "The White Sister (1923)", "White Tiger (1923)", "Why Worry?", "Wild Bill Hickok", "Wilhelm Tell (1923)", "Within the Law (1923)", "A Woman of Paris: A Drama of Fate", "Zaza (1923)", "The Dramatic Life of Abraham Lincoln", "Ace of Cactus Range", "After Dark (1924)", "Against All Odds (1924)", "The Age of Innocence (1924)", "The Air Hawk", "America (1924)", "American Manners", "The Arab (1924)", "The Arizona Express", "The Average Woman", "Barbara Frietchie (1924)", "The Battling Orioles", "Beau Brummel", "The Beautiful Sinner", "The Bedroom Window (1924)", "Behind Two Guns", "Black Lightning (1924)", "Black Oxen", "A Boy of Flanders", "Branded a Bandit", "Breed of the Border (1924)", "Bringin' Home the Bacon", "Butterfly (1924)", "California in '49", "Captain Blood (1924)", "Captain January (1924)", "Changing Husbands", "The Chechahcos", "Circe the Enchantress", "The Circus Cowboy", "Code of the Sea", "Conductor 1492", "Cytherea", "Daddies", "Dante's Inferno (1924)", "The Dawn of a Tomorrow (1924)", "Days of '49", "A Desperate Adventure (1924)", "Dorothy Vernon of Haddon Hall", "Dynamite Dan", "Empty Hands (1924)", "The Enchanted Cottage (1924)", "The Family Secret (1924)", "The Female", "A Fight for Honor", "The Fighting Adventurer", "The Fighting Coward (1924)", "Fighting Fury", "Find Your Man", "Forbidden Paradise (1924)", "The Fortieth Door", "Girl Shy", "The Girl in the Limousine", "The Good Bad Boy", "Grit (1924)", "Half-a-Dollar Bill", "Happiness (1924)", "Hard-Hittin' Hamilton", "Hearts of Oak (1924)", "Helen's Babies", "Her Love Story (1924)", "Her Night of Romance", "A Hero for a Night", "His Darker Self", "His Hour", "Hold Your Breath (1924)", "Hoodman Blind (1923)", "The Hoosier Schoolmaster (1924)", "Hot Water (1924)", "The Humming Bird", "Husbands and Lovers", "L'inhumaine", "Into the Net", "The Iron Horse", "Isn't Life Wonderful", "Janice Meredith", "K: The Unknown", "Kentucky Days", "The King of Wild Horses", "The Last Man on Earth (1924)", "Laughing at Danger (1924)", "The Lighthouse by the Sea", "Lilies of the Field (1924)", "Little Robinson Crusoe", "The Lover of Camille", "Loving Lies", "Mademoiselle Midnight", "Manhandled (1924)", "Manhattan (1924)", "The Marriage Circle", "The Midnight Express", "Midnight Secrets", "Michael (1924)", "Monsieur Beaucaire (1924)", "The Navigator (1924)", "The Net (1923)", "The New School Teacher", "Die Nibelungen: Siegfried", "North of 36", "Not a Drum Was Heard", "On Time", "One Night in Rome", "Open All Night (1924)", "Painted People", "Pal o' Mine", "The Passionate Adventure", "Peter Pan (1924)", "Pied Piper Malone", "Poisoned Paradise", "White Slippers", "The Radio Flyer", "The Reckless Age", "The Red Lily", "The Rejected Woman", "Roaring Rails", "Romance of the Wasteland", "Romola", "A Sainted Devil", "The Sea Hawk (1924)", "Second Youth", "Secrets (1924)", "Secrets of the Night", "Shadow of Egypt", "Sherlock Jr.", "The Signal Tower", "The Silent Accuser", "So Big (1924)", "A Society Scandal", "A Son of the Sahara", "The Speed Spook", "Stepping Lively", "Teeth (1924)", "Ten Scars Make a Man", "Tess of the D'Urbervilles (1924)", "A Thief in Paradise", "The Thief of Bagdad (1924)", "Three Women (1924)", "Thundering Romance", "Thy Name Is Woman", "The Tomboy (1924)", "The Torrent (1924)", "Triumph (1924)", "The Turmoil (1924)", "Twenty Dollars a Week (1924)", "The Unwanted (1924)", "The Vagabond Trail", "Valley of Hate", "Wages of Virtue", "Wanderer of the Wasteland (1924)", "The Warrens of Virginia (1924)", "White Man", "The White Moth", "The White Sin", "Who Is the Man?", "Wild Oranges", "Wine of Youth", "Winner Take All (1924)", "The Wolf Man (1923)", "Wolves of the North (1924)", "Woman to Woman (1923)", "Yolanda (1924)", "The Ace of Spades (1925)", "Across the Deadline (1925)", "Adventure (1925)", "The Adventurous Sex", "The Air Mail", "Raffles: The Amateur Cracksman", "American Pluck", "The Ancient Highway", "The Ancient Mariner", "Are Parents People?", "As Man Desires", "The Awful Truth (1925)", "Baree, Son of Kazan (1925)", "Barriers Burned Away", "Beggar on Horseback", "Below the Line (1925)", "The Best Bad Man", "Beyond the Border (1925)", "The Big Parade (1925)", "Black Cyclone (1925)", "Bobbed Hair (1925)", "Body and Soul (1925)", "Border Justice", "Border Vengeance (1925)", "Braveheart (1925)", "The Bridge of Sighs (1925)", "Cactus Trails (1925)", "The Calgary Stampede", "California Straight Ahead", "Camille of the Barbary Coast", "Capital Punishment (1925)", "Children of the Whirlwind", "The Circle (1925)", "Clash of the Wolves", "Classified (1925)", "Clothes Make the Pirate", "The Cloud Rider", "The Coast Patrol", "The Coast of Folly", "Cobra (1925)", "The Coming of Amos", "Confessions of a Queen", "Crack o' Dawn", "The Crackerjack", "Cyclone Cavalier", "The Dancers (1925)", "The Danger Signal (1925)", "The Dark Angel (1925)", "A Daughter of the Sioux", "DÃ©classÃ©", "The Demon Rider", "The Desert Flower", "The Desert's Price", "The Devil's Cargo", "Dick Turpin (1925)", "Don Q Son of Zorro", "The Dressmaker from Paris", "The Drug Store Cowboy", "Durand of the Bad Lands (1925)", "The Eagle (1925)", "The Early Bird (1925)", "East Lynne (1925)", "Easy Money (1925)", "Eve's Secret", "The Fighting Heart", "The Fighting Sheriff (1925)", "The Fighting Smile", "Fighting the Flames", "The Flame Fighter", "Free to Love (1925)", "The Freshman (1925)", "The Galloping Jinx", "Galloping On", "Gentleman Roughneck", "Go West (1925)", "The Gold Rush", "Gold and the Girl", "The Golden Bed", "The Goose Woman", "Grass: A Nation's Battle for Life", "The Great Circus Mystery", "Greed (1924)", "The Green Archer (1925)", "Head Winds", "Headlines (1925)", "The Heart of a Siren", "Hearts and Spurs", "Her Sister from Paris", "His Master's Voice (1925)", "His People (1925)", "His Secretary", "The Home Maker", "The House Without a Key", "I'll Show You the Town", "Idaho (1925)", "Irish Luck (1925)", "Justice of the Far North", "The Keeper of the Bees (1925)", "Kentucky Pride", "The King on Main Street", "Kiss Me Again (1925)", "A Kiss in the Dark (1925)", "Lady Windermere's Fan (1925)", "Lady of the Night (1925)", "The Lady (1925)", "The Last Edition", "Lazybones (1925)", "Lightnin' (1925)", "Lights of Old Broadway", "Little Annie Rooney", "The Little Colonel", "The Live Wire (1925)", "Lord Jim (1925)", "Lorraine of the Lions", "The Lost World (1925)", "The Love Gamble", "The Lucky Devil", "The Lucky Horseshoe", "The Mad Whirl", "Madame Behave", "Madame Sans-GÃªne (1925)", "A Man Must Live", "The Man Who Played Square", "Marriage in Transit", "The Masked Bride", "The Merry Widow (1925)", "The Midnight Flyer", "The Midnight Girl", "The Midshipman", "Miss Bluebeard", "The Monster (1925)", "My Lady's Lips", "The Mystery Box", "The Mystic (1925)", "Never the Twain Shall Meet (1925)", "The Night Club", "Oh, Doctor!", "Old Clothes", "The Only Thing", "Orochi", "The Other Woman's Story", "Paint and Powder", "Pampered Youth", "The Parasite (1925)", "Parisian Love", "Parisian Nights", "Paths to Paradise", "The Perfect Clown", "Perils of the Rail", "Perils of the Wild", "The Phantom Express (1925)", "The Phantom of the Opera (1925)", "The Plastic Age", "The Pleasure Garden", "The Pony Express", "The Power God", "The Prairie Pirate", "Pretty Ladies", "The Primrose Path (1925)", "Proud Flesh", "The Rag Man", "The Rainbow Trail (1925)", "The Red Kimona", "The Return of Peter Grimm (1926)", "Riders of the Purple Sage (1925)", "The Road to Yesterday (1925)", "The Roughneck", "Rugged Water", "S.O.S. Perils of the Sea", "Sally (1925)", "Sally of the Sawdust", "Sally, Irene and Mary (1925)", "The Salvation Hunters", "School for Wives", "The Scrappin' Kid", "Secret Service Sanders", "Seven Chances", "Seven Keys to Baldpate (1925)", "Seven Sinners (1925)", "She (1925)", "Ship of Souls", "The Shock Punch", "Shore Leave (1925)", "Silent Sheldon", "A Slave of Fashion", "Smouldering Fires", "Soft Shoes", "A Son of His Father", "Soul-Fire", "Speed Madness (1925)", "Sporting Life (1925)", "The Sporting Venus", "Stage Struck (1925)", "Stella Dallas (1925)", "Stop Flirting", "The Storm Breaker", "The Street of Forgotten Men", "Sun-Up", "The Swan (1925)", "Thank You (1925)", "That Royle Girl", "The Thundering Herd (1925)", "Tides of Passion", "The Timber Wolf (1925)", "Tonio, Son of the Sierras", "Too Many Kisses", "The Tower of Lies", "The Trail Rider", "Tricks (1925)", "Tumbleweeds (1925)", "The Unchastened Woman (1925)", "The Unholy Three (1925)", "Up the Ladder", "The Vanishing American (1925)", "Waking Up the Town", "The Wanderer (1925)", "Wandering Fires", "We Moderns", "When Husbands Flirt", "The White Desert", "White Fang (1925)", "The White Outlaw (1925)", "The Wife of the Centaur", "Wild Horse Canyon (1925)", "Wild Horse Mesa (1925)", "Wild Justice (1925)", "Winds of Chance", "The Wizard of Oz (1925)", "Wolfblood", "Wolfheart's Revenge", "A Woman of the World (1925)", "Womanhandled", "The Wrongdoers", "Ypres", "Zakroyshchik iz Torzhka", "Zander the Great", "Ace of Clubs (1925)", "Across the Pacific (1926)"
+
+];
+      
+      /*initiate the autocomplete function on the "myInput" element, and pass along the movies array as possible autocomplete values:*/
+      autocomplete(document.getElementById("myMovie"), movieList);
+      </script>
+      
+    </div>
+    <h2>Input Movie Information:</h2>
+    <h4>Title: {{ movie }}</h4>
+    <h4>URL: <a style="font-size: 75%;" href="{{ input_title_info['url'] }}">{{ input_title_info['url'] }}</a></h4>
+    <h4>Release Year: {{ input_title_info['releaseYear'] }}</h4>
+    <h4>Average Rating: {{ input_title_info['averageRating'] }}</h4>
+    <h4>Genres: {{ input_title_info['genres'] }}</h4>
+
+    <h2>Recommendations:</h2>
+
+    <table>
+      <tr>
+      {% for entry in recommendations %}
+        <td>
+          <h4>Title: {{ entry['title'] }}</h4>
+          <h4>URL: <a style="font-size: 75%;" href="{{ entry['url'] }}">{{ entry['url'] }}</a></h4>
+          <h4>Release Year: {{ entry['releaseYear'] }}</h4>
+          <h4>Average Rating: {{ entry['averageRating'] }}</h4>
+          <h4>Genres: {{ entry['genres'] }}</h4>
+        </td>
+      {% endfor %}
+      </tr>
+    </table>
+
+  </div>
+  </div>
+</body>
+</html>
