@@ -15,7 +15,8 @@ Pull the data from https://datasets.imdbws.com/. Dataset Details can be viewed a
 Create ERD Schema
 Create tables to store movie data
 
-![image](https://user-images.githubusercontent.com/85711507/142744836-c2c47d34-e8d5-4fe4-a7f3-19c904bbee47.png)
+![g_mvs ERD](https://user-images.githubusercontent.com/85711507/142966392-7cb1cc4e-009a-4e0f-8005-b62a3c06ccac.png)
+
 
 
 ### Machine Learning Model
