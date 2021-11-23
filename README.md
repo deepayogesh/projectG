@@ -26,7 +26,7 @@ K-MEANS and Hierarchical clustering machine learning models were tested for clus
 We have made an HTML based UI which takes the user input of movie title and calls the flask app from the UI which will execute the K means model we have build to get the list of recommended movies which Flask app will return to render it on the UI.
 
 ### Presentation in Google Slides.
- https://docs.google.com/presentation/d/1tgqQFmfIOF4AMteqZtrhcAjbesh_rU_qWRb9vEfeG2g/edit?usp=sharing
+https://docs.google.com/presentation/d/1tgqQFmfIOF4AMteqZtrhcAjbesh_rU_qWRb9vEfeG2g/edit?usp=sharing
 
 
 ## Technologies used
@@ -93,11 +93,15 @@ Once above step is completed, we perform the Primary Component Analysis to reduc
 
 ## Dashboard
 
+Below is the screenshot of how our Dashboard looks like after we input movie title. When we input the movie title it provides the user with input movie information which includes the movie title, imdb url, release year, average rating and movie genres. Once user clicks the "Get recommendations" button, they will get five unique movie recommendations.
+
 ![movies_recommendation_engine_goldfinger](https://user-images.githubusercontent.com/85711507/142745152-8562626d-e67b-42b2-84b3-ede8d7b560f9.png)
 
 ## Result of Analysis
 
-For most movies we input in the recommendation engine we get good recommendation from subjective point of view. For example when we input Jurassic park and click on "Get recommendation" button the out put is all relevant movies which user would prefer to watch. We tested handful of random movies from many different genres and we subjectively analyzed the results and all of them appeared to be good recommendations.  
+For most movies we input in the recommendation engine we get good recommendation from subjective point of view. For example when we input Toy Story and click on "Get recommendation" button the out put is all relevant movies which user would prefer to watch. We tested handful of random movies from many different genres and we subjectively analyzed the results and all of them appeared to be good recommendations.  
+
+![movies_recommendation_engine_toy_story](https://user-images.githubusercontent.com/85711507/142952385-ba90f4c6-729e-4bc8-be37-43a75abfd738.png)
 
 
 ## Recommendations for Future Analysis
@@ -108,8 +112,6 @@ For future enhancements, we would build a more robust algorithm and also would a
 
 Initially we lost some time investigating the datasets. The original dataset we chose didn’t work as we expected. So we had to fetch fresh data from IMDB and as a result changes were made in the database. 
 Also it would have been great to have more clarity on the roles and project course material. It took us a while to understand our roles and the project deliverables.
-
-
 
 
 
