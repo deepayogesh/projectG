@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Movies Recommendation Engine</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static/css/style.css">
+  <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+  <link href="//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet"></link>
+  <script src="//code.jquery.com/jquery-2.2.0.min.js"></script>
+  <script src="//code.jquery.com/ui/1.10.2/jquery-ui.js" ></script>
+  <script type="text/javascript">
+    $(function() {
+        $("#autocomplete").autocomplete({
+            source:function(request, response) {
+                $.getJSON("{{url_for('autocomplete')}}",{
+                    q: request.term, // 
+                }, function(data) {
+                    response(data.matching_results); 
+                });
+            },
+            minLength: 2,
+            select: function(event, ui) {
+                console.log(ui.item.value); 
+            }
+        });
+    })
+    
+    </script>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="jumbotron text-center">
+      <h1>Movies Recommendation Engine</h1>
+      <form method="POST">
+        <input type="text" name="inputMovie" placeholder="Goldfinger" id="viewerTitleHTML">
+        <button type="submit" class="btn btn-default">Get Recommendations</button>
+      </form>
+    </div>
+
+    {% if recommendations|length > 0 %}
+      <!-- RUNS IF MODEL WAS SUCCESSFULLY CALLED -->
+      <h2>You Just Watched:</h2>
+      <h4>Title: {{ movie }}</h4>
+      <h4>URL: <a style="font-size: 75%;" href="{{ input_title_info['url'] }}">{{ input_title_info['url'] }}</a></h4>
+      <h4>Release Year: {{ input_title_info['releaseYear'] }}</h4>
+      <h4>Average Rating: {{ input_title_info['averageRating'] }}</h4>
+      <h4>Genres: {{ input_title_info['genres'] }}</h4>
+
+      <h2>Since you watched `{{ movie }}`</h2>
+      <h3>You might also like:</h3>
+
+    {% elif movie|length > 0 %}
+      <!-- RUNS AFTER MODEL IS EXECUTED IF MOVIE NOT FOUND IN LIST OF TITLES -->
+      <h2>You Just Watched:</h2>
+      <h4>Title: {{ movie }}</h4>
+
+    {% endif %}
+
+    <table>
+      <tr>
+      {% for entry in recommendations %}
+        <td>
+          <h4>Title: {{ entry['title'] }}</h4>
+          <h4>URL: <a style="font-size: 75%;" href="{{ entry['url'] }}">{{ entry['url'] }}</a></h4>
+          <h4>Release Year: {{ entry['releaseYear'] }}</h4>
+          <h4>Average Rating: {{ entry['averageRating'] }}</h4>
+          <h4>Genres: {{ entry['genres'] }}</h4>
+        </td>
+      {% endfor %}
+      </tr>
+    </table>
+
+  </div>
+  </div>
+</body>
+</html>

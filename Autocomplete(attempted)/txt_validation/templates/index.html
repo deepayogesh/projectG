@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>AutoComplete</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>        
+        <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <h1>Hello, World!</h1>
+        <p>Search for a movie</p>
+        <input type="text" id="movies">        
+    </body>
+    <script>
+        $(function() {
+            $("#movies").autocomplete({
+                source: "/movies",
+                minLength: 2
+            });
+        });
+    </script>
+</html>
