@@ -1,6 +1,6 @@
 # Import Dependencies
 from flask import Flask, render_template, redirect, url_for, request
-import model
+import model_local
 
 
 #################################################
@@ -28,11 +28,11 @@ def index():
             movie = request.form['inputMovie']
 
             # Get List of Available Titles from Source Data
-            available_titles = model.get_titles()
+            available_titles = model_local.get_titles()
 
             if (movie in available_titles):
-                input_title_info = model.get_inputTitle_info(movie)
-                recommendations = model.get_movies(movie)
+                input_title_info = model_local.get_inputTitle_info(movie)
+                recommendations = model_local.get_movies(movie)
             else:
                 movie = movie + " - Title Not Found"
 
@@ -42,7 +42,7 @@ def index():
                     )
 
 
-    return render_template("index.html", errors=errors, movie=movie, input_title_info=input_title_info, recommendations=recommendations)
+    return render_template("index_local.html", errors=errors, movie=movie, input_title_info=input_title_info, recommendations=recommendations)
 
 
 #################################################

@@ -4,11 +4,11 @@
 # ## Part 0: Import Dependencies and Set-Up
 
 # Import Dependencies
-import config
+#import config
 import numpy as np
 import os
 import pandas as pd
-import psycopg2
+#import psycopg2
 import random
 from scipy.spatial.distance import cdist
 from sklearn.cluster import KMeans
@@ -21,25 +21,25 @@ def get_titles():
 
     # Configure AWS RDS Connection:
 
-    engine = psycopg2.connect (
-            database=config.db_database,
-            user=config.db_user,
-            password=config.db_password,
-            host=config.db_host,
-            port=config.db_port
-            )
+    #engine = psycopg2.connect (
+    #        database=config.db_database,
+    #        user=config.db_user,
+    #        password=config.db_password,
+    #        host=config.db_host,
+    #        port=config.db_port
+    #        )
 
     # Path to file directory and variables for input files.
-    #file_dir = os.path.join("Data")
+    file_dir = os.path.join("Data")
 
     # imdb Titles metadata (Extracted from title.basics.tsv)
-    #titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies_no_nulls.tsv'
+    titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies_no_nulls.tsv'
 
     # imdb US Titles only ids (Extracted from title.akas.tsv)
-    #titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
+    titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
 
     # imdb Ratings data (Derived from title.ratings.tsv)
-    #ratings_data_file = f'{file_dir}/title_ratings.csv'
+    ratings_data_file = f'{file_dir}/title_ratings.csv'
 
 
 
@@ -48,41 +48,41 @@ def get_titles():
     # Import imdb Titles metadata, imdb US Title IDs, imdb Ratings data
     # From Local CSV
 
-    #titles_metadata = pd.read_csv(titles_metadata_file, sep='\t')
-    #titles_us_ids_only = pd.read_csv(titles_us_ids_only_file)
-    #ratings_data = pd.read_csv(ratings_data_file)
+    titles_metadata = pd.read_csv(titles_metadata_file, sep='\t')
+    titles_us_ids_only = pd.read_csv(titles_us_ids_only_file)
+    ratings_data = pd.read_csv(ratings_data_file)
 
     # Import imdb Titles metadata, imdb US Title IDs, imdb Ratings data
     # From AWS RDS
 
-    import_query = "SELECT * FROM g_mvs_title_basics"
-    titles_metadata = pd.read_sql(import_query, engine)
+    #import_query = "SELECT * FROM g_mvs_title_basics"
+    #titles_metadata = pd.read_sql(import_query, engine)
 
-    import_query = "SELECT * FROM g_mvs_us_title_ids"
-    titles_us_ids_only = pd.read_sql(import_query, engine)
+    #import_query = "SELECT * FROM g_mvs_us_title_ids"
+    #titles_us_ids_only = pd.read_sql(import_query, engine)
 
-    import_query = "SELECT * FROM g_mvs_title_ratings"
-    ratings_data = pd.read_sql(import_query, engine)
+    #import_query = "SELECT * FROM g_mvs_title_ratings"
+    #ratings_data = pd.read_sql(import_query, engine)
 
 
     # Close AWS RDS Connection:
-    engine.close()
+    #engine.close()
 
 
     # Drop all Titles where primaryTitle differs from originalTitle
     # (Since language of titles is not often available, this is an attempt
     # to filter out obscure non-English language films)
 
-    titles_metadata = titles_metadata.loc[titles_metadata['primarytitle'] == titles_metadata['originaltitle']]
+    titles_metadata = titles_metadata.loc[titles_metadata['primaryTitle'] == titles_metadata['originalTitle']]
 
 
     # Look for Films with the same primaryTitle
     # and set primaryTitle to primaryTitle + (startYear)
 
-    duplicate_titles_df = pd.concat(g for _, g in titles_metadata.groupby('primarytitle') if len(g) > 1)
+    duplicate_titles_df = pd.concat(g for _, g in titles_metadata.groupby('primaryTitle') if len(g) > 1)
 
-    duplicate_titles_df['primarytitle'] = duplicate_titles_df.apply(lambda row: "".join([row['primarytitle'], " (", str(row['startyear']), ")"]), axis=1)
-    duplicate_titles_df['originaltitle'] = duplicate_titles_df['primarytitle']
+    duplicate_titles_df['primaryTitle'] = duplicate_titles_df.apply(lambda row: "".join([row['primaryTitle'], " (", str(row['startYear']), ")"]), axis=1)
+    duplicate_titles_df['originalTitle'] = duplicate_titles_df['primaryTitle']
 
 
     # Merge duplicate_titles_df back with titles_metadata
@@ -99,15 +99,15 @@ def get_titles():
 
     # Convert startYear Column to int
 
-    titles_metadata['startyear'] = pd.to_numeric(titles_metadata['startyear'])
+    titles_metadata['startYear'] = pd.to_numeric(titles_metadata['startYear'])
 
 
     # Drop titles_metadata Rows with 'startYear' less than 1920
 
-    titles_metadata = titles_metadata.loc[titles_metadata['startyear'] >= 1920]
+    titles_metadata = titles_metadata.loc[titles_metadata['startYear'] >= 1920]
 
 
-    titles_list = titles_metadata['primarytitle'].tolist()
+    titles_list = titles_metadata['primaryTitle'].tolist()
 
 
     # Sort titles_list Alphabetically in Ascending Order
@@ -124,25 +124,25 @@ def get_inputTitle_info(inputTitle):
 
     # Configure AWS RDS Connection:
 
-    engine = psycopg2.connect (
-            database=config.db_database,
-            user=config.db_user,
-            password=config.db_password,
-            host=config.db_host,
-            port=config.db_port
-            )
+    #engine = psycopg2.connect (
+    #        database=config.db_database,
+    #        user=config.db_user,
+    #        password=config.db_password,
+    #        host=config.db_host,
+    #        port=config.db_port
+    #        )
 
     # Path to file directory and variables for input files.
-    #file_dir = os.path.join("Data")
+    file_dir = os.path.join("Data")
 
     # imdb Titles metadata (Extracted from title.basics.tsv)
-    #titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies_no_nulls.tsv'
+    titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies_no_nulls.tsv'
 
     # imdb US Titles only ids (Extracted from title.akas.tsv)
-    #titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
+    titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
 
     # imdb Ratings data (Derived from title.ratings.tsv)
-    #ratings_data_file = f'{file_dir}/title_ratings.csv'
+    ratings_data_file = f'{file_dir}/title_ratings.csv'
 
 
 
@@ -151,39 +151,39 @@ def get_inputTitle_info(inputTitle):
     # Import imdb Titles metadata, imdb US Title IDs, imdb Ratings data
     # From Local CSV
 
-    #titles_metadata = pd.read_csv(titles_metadata_file, sep='\t')
-    #titles_us_ids_only = pd.read_csv(titles_us_ids_only_file)
-    #ratings_data = pd.read_csv(ratings_data_file)
+    titles_metadata = pd.read_csv(titles_metadata_file, sep='\t')
+    titles_us_ids_only = pd.read_csv(titles_us_ids_only_file)
+    ratings_data = pd.read_csv(ratings_data_file)
 
     # Import imdb Titles metadata, imdb US Title IDs, imdb Ratings data
     # From AWS RDS
 
-    import_query = "SELECT * FROM g_mvs_title_basics"
-    titles_metadata = pd.read_sql(import_query, engine)
+    #import_query = "SELECT * FROM g_mvs_title_basics"
+    #titles_metadata = pd.read_sql(import_query, engine)
 
-    import_query = "SELECT * FROM g_mvs_us_title_ids"
-    titles_us_ids_only = pd.read_sql(import_query, engine)
+    #import_query = "SELECT * FROM g_mvs_us_title_ids"
+    #titles_us_ids_only = pd.read_sql(import_query, engine)
 
-    import_query = "SELECT * FROM g_mvs_title_ratings"
-    ratings_data = pd.read_sql(import_query, engine)
+    #import_query = "SELECT * FROM g_mvs_title_ratings"
+    #ratings_data = pd.read_sql(import_query, engine)
 
     # Close AWS RDS Connection:
-    engine.close()
+    #engine.close()
 
     # Drop all Titles where primaryTitle differs from originalTitle
     # (Since language of titles is not often available, this is an attempt
     # to filter out obscure non-English language films)
 
-    titles_metadata = titles_metadata.loc[titles_metadata['primarytitle'] == titles_metadata['originaltitle']]
+    titles_metadata = titles_metadata.loc[titles_metadata['primaryTitle'] == titles_metadata['originalTitle']]
 
 
     # Look for Films with the same primaryTitle
     # and set primaryTitle to primaryTitle + (startYear)
 
-    duplicate_titles_df = pd.concat(g for _, g in titles_metadata.groupby('primarytitle') if len(g) > 1)
+    duplicate_titles_df = pd.concat(g for _, g in titles_metadata.groupby('primaryTitle') if len(g) > 1)
 
-    duplicate_titles_df['primarytitle'] = duplicate_titles_df.apply(lambda row: "".join([row['primarytitle'], " (", str(row['startyear']), ")"]), axis=1)
-    duplicate_titles_df['originaltitle'] = duplicate_titles_df['primarytitle']
+    duplicate_titles_df['primaryTitle'] = duplicate_titles_df.apply(lambda row: "".join([row['primaryTitle'], " (", str(row['startYear']), ")"]), axis=1)
+    duplicate_titles_df['originalTitle'] = duplicate_titles_df['primaryTitle']
 
 
     # Merge duplicate_titles_df back with titles_metadata
@@ -210,12 +210,12 @@ def get_inputTitle_info(inputTitle):
 
     # Convert startYear Column to int
 
-    titles_metadata['startyear'] = pd.to_numeric(titles_metadata['startyear'])
+    titles_metadata['startYear'] = pd.to_numeric(titles_metadata['startYear'])
 
 
     # Drop titles_metadata Rows with 'startYear' less than 1920
 
-    titles_metadata = titles_metadata.loc[titles_metadata['startyear'] >= 1920]
+    titles_metadata = titles_metadata.loc[titles_metadata['startYear'] >= 1920]
 
 
     # Merge titles_metadata and ratings_data on tconst
@@ -230,10 +230,10 @@ def get_inputTitle_info(inputTitle):
 
     inputTitle_info_dict = {}
 
-    inputTitle_info_dict['url'] = movies_df.loc[movies_df['primarytitle'] == inputTitle]['url'].values[0]
-    inputTitle_info_dict['releaseyear'] = movies_df.loc[movies_df['primarytitle'] == inputTitle]['startyear'].values[0]
-    inputTitle_info_dict['averagerating'] = movies_df.loc[movies_df['primarytitle'] == inputTitle]['averagerating'].values[0]
-    inputTitle_info_dict['genres'] = movies_df.loc[movies_df['primarytitle'] == inputTitle]['genres'].values[0].replace(",", ", ")
+    inputTitle_info_dict['url'] = movies_df.loc[movies_df['primaryTitle'] == inputTitle]['url'].values[0]
+    inputTitle_info_dict['releaseYear'] = movies_df.loc[movies_df['primaryTitle'] == inputTitle]['startYear'].values[0]
+    inputTitle_info_dict['averageRating'] = movies_df.loc[movies_df['primaryTitle'] == inputTitle]['averageRating'].values[0]
+    inputTitle_info_dict['genres'] = movies_df.loc[movies_df['primaryTitle'] == inputTitle]['genres'].values[0].replace(",", ", ")
 
     return inputTitle_info_dict
 
@@ -246,25 +246,25 @@ def get_movies(inputTitle):
 
     # Configure AWS RDS Connection:
 
-    engine = psycopg2.connect (
-            database=config.db_database,
-            user=config.db_user,
-            password=config.db_password,
-            host=config.db_host,
-            port=config.db_port
-            )
+    #engine = psycopg2.connect (
+    #        database=config.db_database,
+    #        user=config.db_user,
+    #        password=config.db_password,
+    #        host=config.db_host,
+    #        port=config.db_port
+    #        )
 
     # Path to file directory and variables for input files.
-    #file_dir = os.path.join("Data")
+    file_dir = os.path.join("Data")
 
     # imdb Titles metadata (Extracted from title.basics.tsv)
-    #titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies_no_nulls.tsv'
+    titles_metadata_file = f'{file_dir}/title_basics_non-adult_movies_no_nulls.tsv'
 
     # imdb US Titles only ids (Extracted from title.akas.tsv)
-    #titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
+    titles_us_ids_only_file = f'{file_dir}/US_title_ids_unique.csv'
 
     # imdb Ratings data (Derived from title.ratings.tsv)
-    #ratings_data_file = f'{file_dir}/title_ratings.csv'
+    ratings_data_file = f'{file_dir}/title_ratings.csv'
 
 
 
@@ -273,39 +273,39 @@ def get_movies(inputTitle):
     # Import imdb Titles metadata, imdb US Title IDs, imdb Ratings data
     # From Local CSV
 
-    #titles_metadata = pd.read_csv(titles_metadata_file, sep='\t')
-    #titles_us_ids_only = pd.read_csv(titles_us_ids_only_file)
-    #ratings_data = pd.read_csv(ratings_data_file)
+    titles_metadata = pd.read_csv(titles_metadata_file, sep='\t')
+    titles_us_ids_only = pd.read_csv(titles_us_ids_only_file)
+    ratings_data = pd.read_csv(ratings_data_file)
 
     # Import imdb Titles metadata, imdb US Title IDs, imdb Ratings data
     # From AWS RDS
 
-    import_query = "SELECT * FROM g_mvs_title_basics"
-    titles_metadata = pd.read_sql(import_query, engine)
+    #import_query = "SELECT * FROM g_mvs_title_basics"
+    #titles_metadata = pd.read_sql(import_query, engine)
 
-    import_query = "SELECT * FROM g_mvs_us_title_ids"
-    titles_us_ids_only = pd.read_sql(import_query, engine)
+    #import_query = "SELECT * FROM g_mvs_us_title_ids"
+    #titles_us_ids_only = pd.read_sql(import_query, engine)
 
-    import_query = "SELECT * FROM g_mvs_title_ratings"
-    ratings_data = pd.read_sql(import_query, engine)
+    #import_query = "SELECT * FROM g_mvs_title_ratings"
+    #ratings_data = pd.read_sql(import_query, engine)
 
     # Close AWS RDS Connection:
-    engine.close()
+    #engine.close()
 
     # Drop all Titles where primaryTitle differs from originalTitle
     # (Since language of titles is not often available, this is an attempt
     # to filter out obscure non-English language films)
 
-    titles_metadata = titles_metadata.loc[titles_metadata['primarytitle'] == titles_metadata['originaltitle']]
+    titles_metadata = titles_metadata.loc[titles_metadata['primaryTitle'] == titles_metadata['originalTitle']]
 
 
     # Look for Films with the same primaryTitle
     # and set primaryTitle to primaryTitle + (startYear)
 
-    duplicate_titles_df = pd.concat(g for _, g in titles_metadata.groupby('primarytitle') if len(g) > 1)
+    duplicate_titles_df = pd.concat(g for _, g in titles_metadata.groupby('primaryTitle') if len(g) > 1)
 
-    duplicate_titles_df['primarytitle'] = duplicate_titles_df.apply(lambda row: "".join([row['primarytitle'], " (", str(row['startyear']), ")"]), axis=1)
-    duplicate_titles_df['originaltitle'] = duplicate_titles_df['primarytitle']
+    duplicate_titles_df['primaryTitle'] = duplicate_titles_df.apply(lambda row: "".join([row['primaryTitle'], " (", str(row['startYear']), ")"]), axis=1)
+    duplicate_titles_df['originalTitle'] = duplicate_titles_df['primaryTitle']
 
 
     # Merge duplicate_titles_df back with titles_metadata
@@ -332,12 +332,12 @@ def get_movies(inputTitle):
 
     # Convert startYear Column to int
 
-    titles_metadata['startyear'] = pd.to_numeric(titles_metadata['startyear'])
+    titles_metadata['startYear'] = pd.to_numeric(titles_metadata['startYear'])
 
 
     # Drop titles_metadata Rows with 'startYear' less than 1920
 
-    titles_metadata = titles_metadata.loc[titles_metadata['startyear'] >= 1920]
+    titles_metadata = titles_metadata.loc[titles_metadata['startYear'] >= 1920]
 
 
     # Merge titles_metadata and ratings_data on tconst
@@ -367,8 +367,8 @@ def get_movies(inputTitle):
 
 
     # Integrate 'averageRating' into X DataFrame with 'primaryTitle' as new Index
-    Z = pd.merge(movies_df[['primarytitle', 'averagerating']], X, how='outer', left_index=True, right_index=True)
-    Z.set_index('primarytitle', inplace=True)
+    Z = pd.merge(movies_df[['primaryTitle', 'averageRating']], X, how='outer', left_index=True, right_index=True)
+    Z.set_index('primaryTitle', inplace=True)
 
 
     # Standardize the data with StandardScaler()
@@ -422,7 +422,7 @@ def get_movies(inputTitle):
 
     # Find tconst for viewerTitle
 
-    viewer_tconst = clustered_df.loc[(clustered_df['primarytitle'] == viewerTitle)]['tconst']
+    viewer_tconst = clustered_df.loc[(clustered_df['primaryTitle'] == viewerTitle)]['tconst']
 
 
     # #### Take viewerTitle and find Closest Neighbor
@@ -430,7 +430,7 @@ def get_movies(inputTitle):
 
     # Find Class of viewerTitle
 
-    viewerTitleClass = clustered_df.loc[clustered_df['primarytitle'] == viewerTitle]['Class'].values[0]
+    viewerTitleClass = clustered_df.loc[clustered_df['primaryTitle'] == viewerTitle]['Class'].values[0]
 
 
     # Create a Distance Matrix by 'tconst'
@@ -504,10 +504,10 @@ def get_movies(inputTitle):
 
     # Dictionary Output:
     recommendation_index = list(distance_results[0]).index(entry)
-    recommendation_dict['title'] = clustered_df.iloc[recommendation_index]['primarytitle']
+    recommendation_dict['title'] = clustered_df.iloc[recommendation_index]['primaryTitle']
     recommendation_dict['url'] = clustered_df.iloc[recommendation_index]['url']
-    recommendation_dict['releaseyear'] = clustered_df.iloc[recommendation_index]['startyear']
-    recommendation_dict['averagerating'] = clustered_df.iloc[recommendation_index]['averagerating']
+    recommendation_dict['releaseYear'] = clustered_df.iloc[recommendation_index]['startYear']
+    recommendation_dict['averageRating'] = clustered_df.iloc[recommendation_index]['averageRating']
     recommendation_dict['genres'] = clustered_df.iloc[recommendation_index]['genres'].replace(",", ", ")
 
     recommendation_list.append(recommendation_dict)
@@ -527,7 +527,7 @@ def get_movies(inputTitle):
 
         # Dictionary Output:
         recommendation_index = list(distance_results[0]).index(entry)
-        title = clustered_df.iloc[recommendation_index]['primarytitle']
+        title = clustered_df.iloc[recommendation_index]['primaryTitle']
 
         # If title is equal to the previous title, increment i and restart loop:
 
@@ -535,10 +535,10 @@ def get_movies(inputTitle):
             i = i + 1
             continue
 
-        recommendation_dict['title'] = clustered_df.iloc[recommendation_index]['primarytitle']
+        recommendation_dict['title'] = clustered_df.iloc[recommendation_index]['primaryTitle']
         recommendation_dict['url'] = clustered_df.iloc[recommendation_index]['url']
-        recommendation_dict['releaseyear'] = clustered_df.iloc[recommendation_index]['startyear']
-        recommendation_dict['averagerating'] = clustered_df.iloc[recommendation_index]['averagerating']
+        recommendation_dict['releaseYear'] = clustered_df.iloc[recommendation_index]['startYear']
+        recommendation_dict['averageRating'] = clustered_df.iloc[recommendation_index]['averageRating']
         recommendation_dict['genres'] = clustered_df.iloc[recommendation_index]['genres'].replace(",", ", ")
 
         recommendation_list.append(recommendation_dict)
@@ -547,7 +547,7 @@ def get_movies(inputTitle):
 
 
     # Sort recommendatioin_list by 'averageRating'
-    recommendation_list = sorted(recommendation_list, key=lambda d: d['averagerating'], reverse=True)
+    recommendation_list = sorted(recommendation_list, key=lambda d: d['averageRating'], reverse=True)
 
     print(recommendation_list)
 
@@ -563,6 +563,7 @@ def get_movies(inputTitle):
 #input_movie_text = "The Killing"
 #input_movie_text = "From Russia with Love"
 #input_movie_text = "Toy Story"
+#input_movie_text = "Goldfinger"
 
 #print("Generating Recommendations...")
 
