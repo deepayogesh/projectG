@@ -34,7 +34,9 @@ https://docs.google.com/presentation/d/1tgqQFmfIOF4AMteqZtrhcAjbesh_rU_qWRb9vEfe
 
 <img width="591" alt="Technologies used" src="https://user-images.githubusercontent.com/85711507/142773332-806a9c42-5809-4a4f-956b-d3bf2ee5b5c4.png">
 
+Below is the link to description of all the files for reference:
 
+[File descriptions for this project](docs/File_Descriptions.md)
 
 ## Data Exploration and preliminary analysis
 
