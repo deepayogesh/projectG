@@ -36,7 +36,7 @@ https://docs.google.com/presentation/d/1tgqQFmfIOF4AMteqZtrhcAjbesh_rU_qWRb9vEfe
 
 Below is the link to description of all the files for reference:
 
-[File descriptions for this project](docs/File_Descriptions.md)
+[File descriptions for this project](File_Descriptions.md)
 
 ## Data Exploration and preliminary analysis
 
